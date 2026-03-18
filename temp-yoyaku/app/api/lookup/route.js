@@ -15,7 +15,7 @@ export async function POST(request) {
     const TABLE_NAME = encodeURIComponent('内見予約');
 
     const filterFormula = encodeURIComponent(
-        `AND({受付番号}='${reservationId}',{電話番号}='${phone}',{ステータス}='予約中')`
+        `AND({受付番号}='${reservationId}',{電話番号}='${phone}')`
     );
 
     try {

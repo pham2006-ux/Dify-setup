@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { checkJapaneseHoliday } from '@/lib/holiday';
 
 const JST_OFFSET = 9 * 60 * 60 * 1000; // UTC+9
 
@@ -46,6 +47,15 @@ export async function POST(request) {
         return NextResponse.json({
             available: false,
             reason: '水曜日は定休日のため、内見のご予約を承ることができません。',
+        });
+    }
+
+    // Check holidays using Google Calendar API
+    const holidayInfo = await checkJapaneseHoliday(jstDate);
+    if (holidayInfo.isHoliday) {
+        return NextResponse.json({
+            available: false,
+            reason: `指定された日時は祝日（${holidayInfo.name}）のため、内見のご予約を承ることができません。`,
         });
     }
 

@@ -1,8 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 const BUSINESS_HOURS = { start: 10, end: 16 }; // 10:00-16:00
+const TIME_SLOTS = Array.from(
+  { length: BUSINESS_HOURS.end - BUSINESS_HOURS.start },
+  (_, i) => {
+    const h = BUSINESS_HOURS.start + i;
+    return { value: h, label: `${h}:00` };
+  }
+);
+const DAY_LABELS = ['日', '月', '火', '水', '木', '金', '土'];
 
 export default function Home() {
   const [view, setView] = useState('login');
@@ -14,7 +22,8 @@ export default function Home() {
   const [loginLoading, setLoginLoading] = useState(false);
 
   const [editPhone, setEditPhone] = useState('');
-  const [editDate, setEditDate] = useState('');
+  const [editDate, setEditDate] = useState('');   // YYYY-MM-DD
+  const [editHour, setEditHour] = useState('');    // e.g. "10"
   const [editProperty, setEditProperty] = useState('');
   const [editError, setEditError] = useState('');
   const [editSuccess, setEditSuccess] = useState('');
@@ -29,6 +38,14 @@ export default function Home() {
   // Dynamic property list from Google Sheets
   const [properties, setProperties] = useState([]);
   const [propertiesLoading, setPropertiesLoading] = useState(false);
+  // holidays: array of { date: 'YYYY-MM-DD', name: '...' }
+  const [holidays, setHolidays] = useState([]);
+
+  // Calendar navigation
+  const [calendarMonth, setCalendarMonth] = useState(() => {
+    const now = new Date();
+    return { year: now.getFullYear(), month: now.getMonth() };
+  });
 
   // Fetch properties from Google Sheets
   async function fetchProperties() {
@@ -46,10 +63,36 @@ export default function Home() {
     }
   }
 
-  // Load properties on mount
+  // Fetch Japan holidays from the API route
+  async function fetchHolidays() {
+    try {
+      const res = await fetch('/api/holidays');
+      const data = await res.json();
+      if (data.holidays) {
+        // Support both old format (string[]) and new format ({date, name}[])
+        if (typeof data.holidays[0] === 'string') {
+          setHolidays(data.holidays.map(d => ({ date: d, name: '祝日' })));
+        } else {
+          setHolidays(data.holidays);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch holidays:', err);
+    }
+  }
+
+  // Load properties and holidays on mount
   useEffect(() => {
     fetchProperties();
+    fetchHolidays();
   }, []);
+
+  // Holiday lookup map: 'YYYY-MM-DD' -> holiday name
+  const holidayMap = useMemo(() => {
+    const map = {};
+    holidays.forEach(h => { map[h.date] = h.name; });
+    return map;
+  }, [holidays]);
 
   // --- Login ---
   async function handleLogin(e) {
@@ -89,42 +132,66 @@ export default function Home() {
     if (dateVal) {
       try {
         const d = new Date(dateVal);
-        const offset = d.getTimezoneOffset() * 60000;
-        setEditDate(new Date(d.getTime() - offset).toISOString().slice(0, 16));
-      } catch { setEditDate(''); }
+        // Convert to JST for display
+        const jst = new Date(d.getTime() + 9 * 60 * 60 * 1000);
+        const yyyy = jst.getUTCFullYear();
+        const mm = String(jst.getUTCMonth() + 1).padStart(2, '0');
+        const dd = String(jst.getUTCDate()).padStart(2, '0');
+        setEditDate(`${yyyy}-${mm}-${dd}`);
+        setEditHour(String(jst.getUTCHours()));
+        // Always show current month first per user request
+        const now = new Date();
+        setCalendarMonth({ year: now.getFullYear(), month: now.getMonth() });
+      } catch {
+        setEditDate('');
+        setEditHour('');
+      }
     }
     setEditError('');
     setEditSuccess('');
     setAvailabilityMsg('');
     setAvailabilityOk(null);
-    // Refresh properties when opening edit
     fetchProperties();
     setView('edit');
   }
 
-  // --- Check availability when date or property changes ---
-  async function checkAvailability(property, dateTime) {
-    if (!property || !dateTime) {
+  // Combine date + hour into ISO string in JST
+  function buildDateTimeISO(dateStr, hourStr) {
+    if (!dateStr || hourStr === '') return null;
+    // dateStr = 'YYYY-MM-DD', hourStr = '10' etc.
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const hour = Number(hourStr);
+    // Construct JST date and convert to UTC ISO
+    const jstDate = new Date(Date.UTC(y, m - 1, d, hour - 9, 0, 0));
+    return jstDate.toISOString();
+  }
+
+  // --- Check availability when date, hour or property changes ---
+  async function checkAvailability(property, dateStr, hourStr) {
+    if (!property || !dateStr || hourStr === '') {
       setAvailabilityMsg('');
       setAvailabilityOk(null);
       return;
     }
 
-    // Client-side validation: business hours
-    const d = new Date(dateTime);
-    const hour = d.getHours();
-    if (hour < BUSINESS_HOURS.start || hour >= BUSINESS_HOURS.end) {
-      setAvailabilityMsg('⚠️ 内見対応時間は10:00〜16:00です。');
+    // Client-side validation: Holiday
+    if (holidayMap[dateStr]) {
+      setAvailabilityMsg(`⚠️ ${holidayMap[dateStr]}のため定休日です。`);
       setAvailabilityOk(false);
       return;
     }
 
     // Client-side validation: Wednesday
-    if (d.getDay() === 3) {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const dayObj = new Date(y, m - 1, d);
+    if (dayObj.getDay() === 3) {
       setAvailabilityMsg('⚠️ 水曜日は定休日です。');
       setAvailabilityOk(false);
       return;
     }
+
+    const isoDateTime = buildDateTimeISO(dateStr, hourStr);
+    if (!isoDateTime) return;
 
     try {
       const res = await fetch('/api/check-availability', {
@@ -132,7 +199,7 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           property,
-          dateTime: new Date(dateTime).toISOString(),
+          dateTime: isoDateTime,
           excludeRecordId: recordId,
         }),
       });
@@ -150,14 +217,19 @@ export default function Home() {
     }
   }
 
-  function handleDateChange(val) {
-    setEditDate(val);
-    checkAvailability(editProperty, val);
+  function handleDateSelect(dateStr) {
+    setEditDate(dateStr);
+    checkAvailability(editProperty, dateStr, editHour);
+  }
+
+  function handleHourChange(val) {
+    setEditHour(val);
+    checkAvailability(editProperty, editDate, val);
   }
 
   function handlePropertyChange(val) {
     setEditProperty(val);
-    if (editDate) checkAvailability(val, editDate);
+    if (editDate && editHour !== '') checkAvailability(val, editDate, editHour);
   }
 
   async function handleUpdate(e) {
@@ -166,7 +238,10 @@ export default function Home() {
     setEditSuccess('');
     const fields = {};
     if (editPhone.trim()) fields['電話番号'] = editPhone.trim();
-    if (editDate) fields['内見希望日時'] = new Date(editDate).toISOString();
+    if (editDate && editHour !== '') {
+      const iso = buildDateTimeISO(editDate, editHour);
+      if (iso) fields['内見希望日時'] = iso;
+    }
     if (editProperty.trim()) fields['物件名'] = editProperty.trim();
     if (Object.keys(fields).length === 0) {
       setEditError('変更する項目を入力してください。');
@@ -246,15 +321,150 @@ export default function Home() {
     } catch { return dateStr; }
   }
 
+  // --- Calendar ---
   function getMinDate() {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow.toISOString().split('T')[0];
+    return tomorrow;
   }
+
+  function isDateDisabled(dateStr) {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const date = new Date(y, m - 1, d);
+    const minDate = getMinDate();
+    minDate.setHours(0, 0, 0, 0);
+
+    // Past or today
+    if (date < minDate) return { disabled: true, reason: 'past' };
+    // Wednesday
+    if (date.getDay() === 3) return { disabled: true, reason: '定休日' };
+    // Holiday
+    if (holidayMap[dateStr]) return { disabled: true, reason: holidayMap[dateStr] };
+    return { disabled: false };
+  }
+
+  function getCalendarDays(year, month) {
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startDow = firstDay.getDay(); // 0=Sunday
+
+    const days = [];
+    // Fill leading blanks
+    for (let i = 0; i < startDow; i++) {
+      days.push(null);
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      const mm = String(month + 1).padStart(2, '0');
+      const dd = String(d).padStart(2, '0');
+      days.push(`${year}-${mm}-${dd}`);
+    }
+    return days;
+  }
+
+  function prevMonth() {
+    setCalendarMonth(prev => {
+      if (prev.month === 0) return { year: prev.year - 1, month: 11 };
+      return { year: prev.year, month: prev.month - 1 };
+    });
+  }
+
+  function nextMonth() {
+    setCalendarMonth(prev => {
+      if (prev.month === 11) return { year: prev.year + 1, month: 0 };
+      return { year: prev.year, month: prev.month + 1 };
+    });
+  }
+
+  // Can we go to previous month? Prevent going before current month
+  const canGoPrev = (() => {
+    const now = new Date();
+    return calendarMonth.year > now.getFullYear() ||
+      (calendarMonth.year === now.getFullYear() && calendarMonth.month > now.getMonth());
+  })();
 
   // Get property info for display
   function getPropertyInfo(name) {
     return properties.find(p => p['物件名'] === name);
+  }
+
+  // Calendar component
+  function renderCalendar() {
+    const { year, month } = calendarMonth;
+    const days = getCalendarDays(year, month);
+    const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+
+    return (
+      <div className="calendar">
+        <div className="calendar-header">
+          <button
+            type="button"
+            className="calendar-nav"
+            onClick={prevMonth}
+            disabled={!canGoPrev}
+            aria-label="前月"
+          >
+            ‹
+          </button>
+          <span className="calendar-title">{year}年 {monthNames[month]}</span>
+          <button
+            type="button"
+            className="calendar-nav"
+            onClick={nextMonth}
+            aria-label="翌月"
+          >
+            ›
+          </button>
+        </div>
+        <div className="calendar-weekdays">
+          {DAY_LABELS.map((d, i) => (
+            <div key={d} className={`calendar-weekday ${i === 0 ? 'sunday' : ''} ${i === 3 ? 'wednesday' : ''} ${i === 6 ? 'saturday' : ''}`}>
+              {d}
+            </div>
+          ))}
+        </div>
+        <div className="calendar-grid">
+          {days.map((dateStr, idx) => {
+            if (dateStr === null) {
+              return <div key={`blank-${idx}`} className="calendar-day blank" />;
+            }
+            const dayNum = parseInt(dateStr.split('-')[2], 10);
+            const info = isDateDisabled(dateStr);
+            const isSelected = dateStr === editDate;
+            const isHoliday = !!holidayMap[dateStr];
+            const [, , dStr] = dateStr.split('-');
+            const dayOfWeek = new Date(parseInt(dateStr.split('-')[0]), parseInt(dateStr.split('-')[1]) - 1, dayNum).getDay();
+
+            let className = 'calendar-day';
+            if (info.disabled) className += ' disabled';
+            if (isSelected) className += ' selected';
+            if (isHoliday) className += ' holiday';
+            if (dayOfWeek === 0) className += ' sunday';
+            if (dayOfWeek === 3) className += ' wednesday';
+            if (dayOfWeek === 6) className += ' saturday';
+
+            return (
+              <button
+                key={dateStr}
+                type="button"
+                className={className}
+                disabled={info.disabled}
+                onClick={() => handleDateSelect(dateStr)}
+                title={info.disabled && info.reason !== 'past' ? info.reason : undefined}
+              >
+                <span className="day-number">{dayNum}</span>
+                {isHoliday && <span className="holiday-dot" title={holidayMap[dateStr]} />}
+                {info.disabled && info.reason === '定休日' && <span className="closed-dot" />}
+              </button>
+            );
+          })}
+        </div>
+        <div className="calendar-legend">
+          <span className="legend-item"><span className="legend-dot holiday-dot-legend" /> 祝日</span>
+          <span className="legend-item"><span className="legend-dot closed-dot-legend" /> 定休日（水曜）</span>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -355,15 +565,28 @@ export default function Home() {
                   <input id="editPhone" type="tel" value={editPhone} onChange={e => setEditPhone(e.target.value)} />
                 </div>
                 <div className="field">
-                  <label htmlFor="editDate">📅 内見希望日時</label>
-                  <input
-                    id="editDate"
-                    type="datetime-local"
-                    value={editDate}
-                    onChange={e => handleDateChange(e.target.value)}
-                    min={`${getMinDate()}T10:00`}
-                    step="3600"
-                  />
+                  <label>📅 内見希望日</label>
+                  {renderCalendar()}
+                  {editDate && (
+                    <div className="selected-date-display">
+                      選択中: <strong>{editDate.replace(/-/g, '/')}</strong>
+                    </div>
+                  )}
+                </div>
+                <div className="field">
+                  <label htmlFor="editHour">🕐 希望時間</label>
+                  <select
+                    id="editHour"
+                    value={editHour}
+                    onChange={e => handleHourChange(e.target.value)}
+                  >
+                    <option value="">時間を選択してください</option>
+                    {TIME_SLOTS.map(slot => (
+                      <option key={slot.value} value={slot.value}>
+                        {slot.label}〜{slot.value + 1}:00
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="field">
                   <label htmlFor="editProp">🏠 物件名</label>

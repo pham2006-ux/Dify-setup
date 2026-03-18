@@ -1,0 +1,212 @@
+app:
+  description: '箇条書きメモを社内フォーマットの日報・週報に自動変換するボット。テンプレート変換ノードを活用。'
+  icon: "\U0001F4DD"
+  icon_background: '#F3E5F5'
+  mode: advanced-chat
+  name: "日報・週報作成支援ボット"
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.7.4@5faf411e694e0da130a337347a625a3812b1b7502a0183382d66d92c841bf05a
+    version: null
+kind: app
+version: 0.5.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: "📝 日報・週報作成支援ボットです。\n\n今日の業務内容をメモ書きや箇条書きで入力してください。\n社内フォーマットの日報・週報に自動変換します！\n\n💡 入力例：\n「午前中Aプロジェクトの設計書レビュー、午後は定例会議に参加、明日はテスト実施予定」"
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions:
+    - "今日の業務：朝会→資料作成→顧客MTG→議事録作成、明日は提案書の修正"
+    - "週報を作成してください。月曜：設計レビュー、火曜：実装、水曜：テスト、木曜：バグ修正、金曜：リリース準備"
+    - "午前中にA社への提案資料を作成、午後はチームMTG。課題：デザインの方向性が未確定"
+    suggested_questions_after_answer:
+      enabled: true
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1740400000001-source-llm-target
+      source: '1740400000001'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: template-transform
+      id: llm-source-1740400000002-target
+      source: llm
+      sourceHandle: source
+      target: '1740400000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: template-transform
+        targetType: answer
+      id: 1740400000002-source-answer-target
+      source: '1740400000002'
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: "ユーザー入力"
+        type: start
+        variables: []
+      height: 73
+      id: '1740400000001'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+        memory:
+          query_prompt_template: '{{#sys.query#}}
+
+
+            {{#sys.files#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: true
+            size: 10
+        model:
+          completion_params:
+            temperature: 0.3
+          mode: chat
+          name: gemini-2.5-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: prompt-report-system
+          role: system
+          text: "あなたは日報・週報作成の専門アシスタントです。\n\nユーザーのメモや箇条書きを分析し、以下のJSON形式のみを出力してください。\n他のテキストは一切出力しないでください。\n\n{\n  \"report_type\": \"daily|weekly\",\n  \"tasks\": [\n    {\"name\": \"業務名\", \"detail\": \"詳細・進捗\", \"hours\": \"推定作業時間\"}\n  ],\n  \"issues\": [\"課題1\", \"課題2\"],\n  \"next_plans\": [\"明日の予定1\"],\n  \"notes\": [\"連絡・共有事項\"]\n}\n\nルール：\n- 「週報」という言葉があれば report_type は weekly、それ以外は daily\n- 作業時間はメモから推定（不明な場合は空文字）\n- issuesが無ければ空配列\n- notesが無ければ空配列\n- 必ず有効なJSONのみを出力すること"
+        selected: false
+        title: "メモ構造化"
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: llm
+      position:
+        x: 380
+        y: 282
+      positionAbsolute:
+        x: 380
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        selected: false
+        template: "{% set data = llm_output | replace('```json', '') | replace('```', '') %}\n{% set report = data | tojson | default('{}') %}\n{% if '\"report_type\": \"weekly\"' in data %}\n📊 **【週報】**\n━━━━━━━━━━━━━━━━━━━━━━\n所属：○○部　氏名：要記入\n\n■ 今週の業務内容\n{{ data }}\n\n---\n✅ 上記の内容を確認し、必要に応じて修正してください。\n修正がある場合は「○○を変更して」とお伝えください。\n{% else %}\n📝 **【日報】**\n━━━━━━━━━━━━━━━━━━━━━━\n所属：○○部　氏名：要記入\n\n■ 本日の業務内容\n{{ data }}\n\n---\n✅ 上記の内容を確認し、必要に応じて修正してください。\n修正がある場合は「○○を変更して」とお伝えください。\n{% endif %}"
+        title: "レポート整形"
+        type: template-transform
+        variables:
+        - value_selector:
+          - llm
+          - text
+          variable: llm_output
+      height: 52
+      id: '1740400000002'
+      position:
+        x: 680
+        y: 282
+      positionAbsolute:
+        x: 680
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: '{{#1740400000002.output#}}'
+        selected: false
+        title: "回答"
+        type: answer
+        variables: []
+      height: 102
+      id: answer
+      position:
+        x: 980
+        y: 282
+      positionAbsolute:
+        x: 980
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 151.5
+      y: 63.5
+      zoom: 1
+  rag_pipeline_variables: []

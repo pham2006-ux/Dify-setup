@@ -1,0 +1,175 @@
+app:
+  description: '会議メモや文字起こしテキストから、決定事項・アクションアイテム・次回予定を含む構造化された議事録を自動生成するボット。'
+  icon: "\U0001F4CB"
+  icon_background: '#E8F5E9'
+  mode: advanced-chat
+  name: "議事録自動要約ボット"
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.7.4@5faf411e694e0da130a337347a625a3812b1b7502a0183382d66d92c841bf05a
+    version: null
+kind: app
+version: 0.5.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: "こんにちは！📋 議事録自動要約ボットです。\n\n会議のメモや文字起こしテキストを貼り付けてください。\n以下の形式で構造化された議事録を自動生成します：\n\n✅ 会議基本情報（日時・参加者）\n✅ 議題と議論内容\n✅ 決定事項\n✅ アクションアイテム（担当者・期限付き）\n✅ 次回予定\n\n生成後、「決定事項を追加して」などの修正指示にも対応します。"
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions:
+    - "今日の定例会議のメモを議事録にしてください"
+    - "この文字起こしテキストから議事録を作成してください"
+    - "前回の議事録にアクションアイテムを追加してください"
+    suggested_questions_after_answer:
+      enabled: true
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1740100000001-source-llm-target
+      source: '1740100000001'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        sourceType: llm
+        targetType: answer
+      id: llm-answer
+      source: llm
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+    nodes:
+    - data:
+        selected: false
+        title: "ユーザー入力"
+        type: start
+        variables: []
+      height: 73
+      id: '1740100000001'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+        memory:
+          query_prompt_template: '{{#sys.query#}}
+
+
+            {{#sys.files#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: true
+            size: 10
+        model:
+          completion_params:
+            temperature: 0.3
+          mode: chat
+          name: gemini-2.5-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: prompt-minutes-system
+          role: system
+          text: "# Role\nあなたは議事録作成の専門アシスタントです。\n会議のメモや文字起こしテキストから、ビジネスで使える構造化された議事録を生成します。\n\n# Objective\n1. ユーザーが貼り付けた会議テキスト（メモ、文字起こし、箇条書き等）を分析する\n2. 以下の構造化フォーマットで議事録を出力する\n3. テキストに書かれていない内容は絶対に捏造しない\n4. 不明な情報は「要記入」または「記載なし」と明示する\n\n# Output Format\n以下のフォーマットで出力してください：\n\n📋 **議事録**\n━━━━━━━━━━━━━━━━━━━━━━\n\n**■ 会議基本情報**\n- 会議名：（テキストから推定、不明な場合は「要記入」）\n- 日時：（テキストから推定、不明な場合は「要記入」）\n- 参加者：（テキストから推定、不明な場合は「要記入」）\n- 場所：（テキストから推定、不明な場合は省略）\n\n**■ 議題と議論内容**\n1. **[議題1]**\n   - 議論ポイント\n   - 発言者（判別可能な場合）\n2. **[議題2]**\n   - ...\n\n**■ 決定事項**\n- ✅ 決定事項1\n- ✅ 決定事項2\n\n**■ アクションアイテム**\n| 担当者 | タスク | 期限 |\n|--------|--------|------|\n| ○○ | タスク内容 | 期限（記載なしの場合は「要確認」） |\n\n**■ 次回予定**\n- 次回会議の日時・議題（言及がある場合、なければ「未定」）\n\n**■ 備考**\n- 保留事項や注意点（該当がなければ省略）\n\n# Rules\n- テキストに明示されていない内容を推測・捏造しない\n- 発言者が不明な場合は「発言者不明」と記載する\n- 箇条書きメモの場合は、内容を補完せず構造化のみ行う\n- 日時や参加者が不明な場合は「要記入」とする\n- 追加の修正依頼（「アクションアイテムを追加して」等）にも対応する\n- 出力は日本語で行う\n\n# Style\n- ビジネス文書として適切な丁寧な表現\n- 簡潔で読みやすい構成\n- 箇条書きと表を活用して視認性を高める"
+        selected: false
+        title: "議事録生成"
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: llm
+      position:
+        x: 380
+        y: 282
+      positionAbsolute:
+        x: 380
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: '{{#llm.text#}}'
+        selected: false
+        title: "回答"
+        type: answer
+        variables: []
+      height: 102
+      id: answer
+      position:
+        x: 680
+        y: 282
+      positionAbsolute:
+        x: 680
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 151.5
+      y: 63.5
+      zoom: 1
+  rag_pipeline_variables: []

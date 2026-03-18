@@ -1,0 +1,340 @@
+app:
+  description: '経費申請情報を社内規程に照合し、承認推奨・要確認・差戻し推奨を自動判定するワークフロー。'
+  icon: "\U0001F4B0"
+  icon_background: '#FFF3E0'
+  mode: advanced-chat
+  name: "経費精算チェッカー"
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.7.4@5faf411e694e0da130a337347a625a3812b1b7502a0183382d66d92c841bf05a
+    version: null
+kind: app
+version: 0.5.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: 'こんにちは！経費精算チェッカーです。📝
+右側のパネルから経費情報を入力して申請してください。社内規程に沿っているか自動でチェックを行います。'
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1740200000001-source-llm-target
+      source: '1740200000001'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: llm-source-1740200000002-target
+      source: llm
+      sourceHandle: source
+      target: '1740200000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: if-else
+      id: 1740200000002-source-1740200000003-target
+      source: '1740200000002'
+      sourceHandle: source
+      target: '1740200000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: answer
+      id: 1740200000003-true-1740200000004-target
+      source: '1740200000003'
+      sourceHandle: 'true'
+      target: '1740200000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: answer
+      id: 1740200000003-false-answer-target
+      source: '1740200000003'
+      sourceHandle: 'false'
+      target: answer
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: "経費情報入力"
+        type: start
+        variables:
+        - label: "費用項目"
+          max_length: 100
+          options:
+          - "交通費"
+          - "交際費"
+          - "消耗品費"
+          - "出張旅費"
+          - "通信費"
+          - "その他"
+          required: true
+          type: select
+          variable: expense_type
+        - label: "金額（税込・円）"
+          max_length: 20
+          required: true
+          type: number
+          variable: amount
+        - label: "利用日（YYYY-MM-DD）"
+          max_length: 10
+          required: true
+          type: text-input
+          variable: date
+        - label: "利用内容の詳細"
+          max_length: 500
+          required: true
+          type: paragraph
+          variable: description
+        - label: "領収書の有無"
+          max_length: 10
+          options:
+          - "あり"
+          - "なし"
+          required: true
+          type: select
+          variable: receipt
+        - label: "参加人数（交際費の場合）"
+          max_length: 10
+          required: false
+          type: number
+          variable: num_people
+      height: 290
+      id: '1740200000001'
+      position:
+        x: 80
+        y: 200
+      positionAbsolute:
+        x: 80
+        y: 200
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+        memory:
+          query_prompt_template: ''
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 10
+        model:
+          completion_params:
+            temperature: 0.1
+          mode: chat
+          name: gemini-2.5-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: prompt-expense-system
+          role: system
+          text: "あなたは経費精算チェックの専門アシスタントです。\n入力された経費情報を分析し、以下のJSON形式で構造化してください。\n\n入力情報：\n- 費用項目: {{#1740200000001.expense_type#}}\n- 金額: {{#1740200000001.amount#}}円\n- 利用日: {{#1740200000001.date#}}\n- 利用内容: {{#1740200000001.description#}}\n- 領収書: {{#1740200000001.receipt#}}\n- 参加人数: {{#1740200000001.num_people#}}\n\n以下のJSON形式のみを出力してください。他のテキストは一切出力しないでください：\n{\"expense_type\": \"費用項目\", \"amount\": 金額（数値）, \"date\": \"YYYY-MM-DD\", \"description\": \"利用内容\", \"receipt\": true/false, \"num_people\": 人数（数値、不明は0）}"
+        selected: false
+        title: "情報構造化"
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: llm
+      position:
+        x: 380
+        y: 282
+      positionAbsolute:
+        x: 380
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: "import json\nfrom datetime import datetime\n\ndef main(llm_output: str, raw_amount: float, raw_expense_type: str, raw_receipt: str) -> dict:\n    violations = []\n    warnings = []\n    \n    try:\n        data = json.loads(llm_output.strip())\n    except:\n        data = {\n            \"expense_type\": raw_expense_type,\n            \"amount\": raw_amount,\n            \"receipt\": raw_receipt == \"あり\",\n            \"num_people\": 0\n        }\n    \n    amount = float(data.get(\"amount\", raw_amount))\n    expense_type = data.get(\"expense_type\", raw_expense_type)\n    has_receipt = data.get(\"receipt\", raw_receipt == \"あり\")\n    num_people = int(data.get(\"num_people\", 0))\n    \n    # ルール1: 領収書チェック（3,000円以上で領収書なし）\n    if amount >= 3000 and not has_receipt:\n        violations.append(\"3,000円以上の経費には領収書が必須です\")\n    \n    # ルール2: 交際費上限チェック\n    if expense_type == \"交際費\" and num_people > 0:\n        per_person = amount / num_people\n        if per_person > 5000:\n            warnings.append(f\"交際費の1人あたり金額が{int(per_person):,}円で、上限5,000円を超えています\")\n    \n    # ルール3: 消耗品の資産計上チェック\n    if expense_type == \"消耗品費\" and amount >= 30000:\n        violations.append(f\"消耗品費{int(amount):,}円は30,000円以上のため、資産計上が必要です\")\n    \n    # ルール4: 出張旅費の事前申請チェック\n    if expense_type == \"出張旅費\" and amount > 100000:\n        warnings.append(\"出張旅費が100,000円を超えています。事前申請は完了していますか？\")\n    \n    # 判定結果\n    if len(violations) > 0:\n        result = \"REJECTED\"\n        result_label = \"❌ 差戻し推奨\"\n    elif len(warnings) > 0:\n        result = \"WARNING\"\n        result_label = \"⚠️ 要確認\"\n    else:\n        result = \"APPROVED\"\n        result_label = \"✅ 承認推奨\"\n    \n    violations_text = \"\\n\".join([f\"- {v}\" for v in violations]) if violations else \"なし\"\n    warnings_text = \"\\n\".join([f\"- {w}\" for w in warnings]) if warnings else \"なし\"\n    \n    detail = f\"\"\"## 経費精算チェック結果\\n\\n**判定: {result_label}**\\n\\n### 申請内容\\n- 費用項目: {expense_type}\\n- 金額: {int(amount):,}円\\n- 領収書: {'あり' if has_receipt else 'なし'}\\n\\n### チェック結果\\n\\n**違反事項:**\\n{violations_text}\\n\\n**注意事項:**\\n{warnings_text}\"\"\"\n    \n    return {\n        \"result\": result,\n        \"detail\": detail\n    }\n"
+        code_language: python3
+        outputs:
+          detail:
+            children: null
+            type: string
+          result:
+            children: null
+            type: string
+        selected: false
+        title: "規程チェック"
+        type: code
+        variables:
+        - value_selector:
+          - llm
+          - text
+          variable: llm_output
+        - value_selector:
+          - '1740200000001'
+          - amount
+          variable: raw_amount
+        - value_selector:
+          - '1740200000001'
+          - expense_type
+          variable: raw_expense_type
+        - value_selector:
+          - '1740200000001'
+          - receipt
+          variable: raw_receipt
+      height: 200
+      id: '1740200000002'
+      position:
+        x: 680
+        y: 230
+      positionAbsolute:
+        x: 680
+        y: 230
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: is
+            id: cond-rejected
+            value: 'REJECTED'
+            varType: string
+            variable_selector:
+            - '1740200000002'
+            - result
+          id: 'true'
+          logical_operator: and
+        selected: false
+        title: "判定分岐"
+        type: if-else
+      height: 179
+      id: '1740200000003'
+      position:
+        x: 1000
+        y: 230
+      positionAbsolute:
+        x: 1000
+        y: 230
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: "{{#1740200000002.detail#}}\n\n---\n⚠️ **この申請は規程違反の可能性があります。修正の上、再申請してください。**\n不明な点は経理部（内線: 2100）までお問い合わせください。"
+        selected: false
+        title: "差戻し回答"
+        type: answer
+        variables: []
+      height: 104
+      id: '1740200000004'
+      position:
+        x: 1320
+        y: 150
+      positionAbsolute:
+        x: 1320
+        y: 150
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: "{{#1740200000002.detail#}}\n\n---\n✅ 上記の内容で経費精算システムから申請してください。"
+        selected: false
+        title: "承認回答"
+        type: answer
+        variables: []
+      height: 102
+      id: answer
+      position:
+        x: 1320
+        y: 380
+      positionAbsolute:
+        x: 1320
+        y: 380
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 0
+      y: 0
+      zoom: 0.8
+  rag_pipeline_variables: []

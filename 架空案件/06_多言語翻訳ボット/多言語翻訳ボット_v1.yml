@@ -1,0 +1,230 @@
+app:
+  description: 'ビジネスメール・技術文書・社内チャットを多言語に翻訳。専門用語の正確性とビジネストーンを維持。'
+  icon: "\U0001F30D"
+  icon_background: '#E0F7FA'
+  mode: advanced-chat
+  name: "多言語ビジネス翻訳ボット"
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.7.4@5faf411e694e0da130a337347a625a3812b1b7502a0183382d66d92c841bf05a
+    version: null
+kind: app
+version: 0.5.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: "🌍 多言語ビジネス翻訳ボットです。\n\n翻訳したいテキストを入力してください。\n入力言語を自動検出し、翻訳します。\n\n📌 対応言語：\n🇯🇵 日本語 ↔ 🇺🇸 英語 / 🇨🇳 中国語 / 🇰🇷 韓国語 / 🇻🇳 ベトナム語 / 🇹🇭 タイ語\n\n💡 翻訳の指示例：\n「これを英語に翻訳して」\n「ビジネスメールのトーンで英語にして」\n「技術文書として中国語に翻訳」"
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions:
+    - "この文を英語のビジネスメールに翻訳してください"
+    - "以下の技術文書を中国語に翻訳してください"
+    - "このメッセージをカジュアルな英語に翻訳して"
+    suggested_questions_after_answer:
+      enabled: true
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: code
+      id: 1740600000001-source-1740600000002-target
+      source: '1740600000001'
+      sourceHandle: source
+      target: '1740600000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: llm
+      id: 1740600000002-source-llm-target
+      source: '1740600000002'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        sourceType: llm
+        targetType: answer
+      id: llm-answer
+      source: llm
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+    nodes:
+    - data:
+        selected: false
+        title: "ユーザー入力"
+        type: start
+        variables: []
+      height: 73
+      id: '1740600000001'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: "def main(user_input: str) -> dict:\n    text = user_input.strip()\n    \n    # 簡易言語検出\n    target_lang = \"en\"\n    mode = \"business\"\n    \n    # ユーザー指示から対象言語を検出\n    lang_keywords = {\n        \"英語\": \"en\", \"english\": \"en\",\n        \"中国語\": \"zh\", \"chinese\": \"zh\",\n        \"韓国語\": \"ko\", \"korean\": \"ko\",\n        \"ベトナム語\": \"vi\", \"vietnamese\": \"vi\",\n        \"タイ語\": \"th\", \"thai\": \"th\",\n        \"日本語\": \"ja\", \"japanese\": \"ja\"\n    }\n    \n    lang_names = {\n        \"en\": \"英語\", \"zh\": \"中国語\", \"ko\": \"韓国語\",\n        \"vi\": \"ベトナム語\", \"th\": \"タイ語\", \"ja\": \"日本語\"\n    }\n    \n    lower_text = text.lower()\n    for keyword, lang in lang_keywords.items():\n        if keyword.lower() in lower_text:\n            target_lang = lang\n            break\n    \n    # 翻訳モード検出\n    if \"技術\" in text or \"テクニカル\" in text or \"technical\" in lower_text:\n        mode = \"technical\"\n    elif \"カジュアル\" in text or \"casual\" in lower_text:\n        mode = \"casual\"\n    else:\n        mode = \"business\"\n    \n    mode_names = {\n        \"business\": \"ビジネスメール\",\n        \"technical\": \"技術文書\",\n        \"casual\": \"カジュアル\"\n    }\n    \n    # 入力テキストの言語を推定（日本語文字が含まれるか）\n    has_japanese = any(ord(c) > 0x3000 for c in text[:100])\n    source_lang = \"ja\" if has_japanese else \"en\"\n    \n    # 同一言語の場合はデフォルト翻訳先に\n    if source_lang == target_lang:\n        target_lang = \"en\" if source_lang == \"ja\" else \"ja\"\n    \n    return {\n        \"source_lang\": lang_names.get(source_lang, \"不明\"),\n        \"target_lang\": lang_names.get(target_lang, \"英語\"),\n        \"target_lang_code\": target_lang,\n        \"mode\": mode,\n        \"mode_name\": mode_names.get(mode, \"ビジネスメール\"),\n        \"original_text\": text\n    }\n"
+        code_language: python3
+        outputs:
+          mode:
+            children: null
+            type: string
+          mode_name:
+            children: null
+            type: string
+          original_text:
+            children: null
+            type: string
+          source_lang:
+            children: null
+            type: string
+          target_lang:
+            children: null
+            type: string
+          target_lang_code:
+            children: null
+            type: string
+        selected: false
+        title: "言語検出・モード解析"
+        type: code
+        variables:
+        - value_selector:
+          - sys
+          - query
+          variable: user_input
+      height: 200
+      id: '1740600000002'
+      position:
+        x: 380
+        y: 230
+      positionAbsolute:
+        x: 380
+        y: 230
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+        memory:
+          query_prompt_template: '{{#sys.query#}}
+
+
+            {{#sys.files#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: true
+            size: 10
+        model:
+          completion_params:
+            temperature: 0.3
+          mode: chat
+          name: gemini-2.5-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: prompt-translate-system
+          role: system
+          text: "あなたはプロのビジネス翻訳者です。\n\n以下の設定に従って翻訳を実行してください：\n\n- 翻訳元言語: {{#1740600000002.source_lang#}}\n- 翻訳先言語: {{#1740600000002.target_lang#}}\n- 翻訳モード: {{#1740600000002.mode_name#}}\n\n## 翻訳モード別ルール\n\n### ビジネスメール\n- 丁寧で格式のあるトーンを維持\n- 敬語・丁寧語を適切に使用\n- ビジネス慣習に合った表現\n\n### 技術文書\n- 専門用語は正確に翻訳（一般的な訳を優先）\n- 技術用語は初出時に原語を括弧書きで併記\n- 簡潔で明確な表現\n\n### カジュアル\n- 自然で読みやすい口語的表現\n- 堅すぎない丁寧さ\n\n## 出力フォーマット\n\n🌐 **翻訳結果**\n━━━━━━━━━━━━━━━━━━━━━━\n📌 {{#1740600000002.source_lang#}} → {{#1740600000002.target_lang#}}（{{#1740600000002.mode_name#}}モード）\n\n**【原文】**\n（原文をそのまま表示）\n\n**【訳文】**\n（翻訳結果）\n\n---\n💡 修正が必要な場合は「もう少し丁寧に」「カジュアルにして」などとお伝えください。"
+        selected: false
+        title: "翻訳実行"
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: llm
+      position:
+        x: 680
+        y: 282
+      positionAbsolute:
+        x: 680
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: '{{#llm.text#}}'
+        selected: false
+        title: "回答"
+        type: answer
+        variables: []
+      height: 102
+      id: answer
+      position:
+        x: 980
+        y: 282
+      positionAbsolute:
+        x: 980
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 151.5
+      y: 63.5
+      zoom: 1
+  rag_pipeline_variables: []

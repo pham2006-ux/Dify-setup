@@ -1,0 +1,449 @@
+app:
+  description: '顧客からの問い合わせ内容を自動分類し、緊急度を判定、該当部署のSlackチャンネルへ自動通知するボット。'
+  icon: "\U0001F4E8"
+  icon_background: '#E3F2FD'
+  mode: advanced-chat
+  name: "問い合わせ分類・Slack通知ボット"
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.7.4@5faf411e694e0da130a337347a625a3812b1b7502a0183382d66d92c841bf05a
+    version: null
+kind: app
+version: 0.5.0
+workflow:
+  conversation_variables: []
+  environment_variables:
+  - description: "Slack Webhook - 技術サポート"
+    id: env-slack-tech
+    name: SLACK_WEBHOOK_TECH
+    selector:
+    - env
+    - SLACK_WEBHOOK_TECH
+    value: ''
+    value_type: secret
+  - description: "Slack Webhook - 請求・料金"
+    id: env-slack-billing
+    name: SLACK_WEBHOOK_BILLING
+    selector:
+    - env
+    - SLACK_WEBHOOK_BILLING
+    value: ''
+    value_type: secret
+  - description: "Slack Webhook - 契約・法務"
+    id: env-slack-legal
+    name: SLACK_WEBHOOK_LEGAL
+    selector:
+    - env
+    - SLACK_WEBHOOK_LEGAL
+    value: ''
+    value_type: secret
+  - description: "Slack Webhook - 一般問い合わせ"
+    id: env-slack-general
+    name: SLACK_WEBHOOK_GENERAL
+    selector:
+    - env
+    - SLACK_WEBHOOK_GENERAL
+    value: ''
+    value_type: secret
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: "📨 顧客問い合わせ分類・通知ボットです。\n\nお客様からの問い合わせ内容を貼り付けてください。\n自動で以下を実行します：\n\n1️⃣ カテゴリ分類（技術/請求/契約/一般）\n2️⃣ 緊急度判定（🔴緊急 / 🟡通常）\n3️⃣ 担当チャンネルへSlack自動通知\n\n※ 環境変数にSlack Webhook URLの設定が必要です。"
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions:
+    - "システムにログインできなくなりました。至急対応をお願いします。"
+    - "先月の請求書の金額に誤りがあるようです。確認をお願いします。"
+    - "契約の更新手続きについて教えてください。"
+    suggested_questions_after_answer:
+      enabled: true
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1740300000001-source-llm-target
+      source: '1740300000001'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: llm-source-1740300000002-target
+      source: llm
+      sourceHandle: source
+      target: '1740300000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: if-else
+      id: 1740300000002-source-1740300000003-target
+      source: '1740300000002'
+      sourceHandle: source
+      target: '1740300000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: http-request
+      id: 1740300000003-true-1740300000004-target
+      source: '1740300000003'
+      sourceHandle: 'true'
+      target: '1740300000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: http-request
+      id: 1740300000003-false-1740300000005-target
+      source: '1740300000003'
+      sourceHandle: 'false'
+      target: '1740300000005'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: http-request
+        targetType: answer
+      id: 1740300000004-source-1740300000006-target
+      source: '1740300000004'
+      sourceHandle: source
+      target: '1740300000006'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: http-request
+        targetType: answer
+      id: 1740300000005-source-answer-target
+      source: '1740300000005'
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: "ユーザー入力"
+        type: start
+        variables: []
+      height: 73
+      id: '1740300000001'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+        memory:
+          query_prompt_template: '{{#sys.query#}}
+
+
+            {{#sys.files#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: true
+            size: 10
+        model:
+          completion_params:
+            temperature: 0.2
+          mode: chat
+          name: gemini-2.5-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: prompt-classify-system
+          role: system
+          text: "あなたは顧客問い合わせの分類専門AIです。\n\n問い合わせ内容を分析し、以下のJSON形式のみを出力してください。\n他のテキストは一切出力しないでください。\n\n{\"category\": \"TECH|BILLING|LEGAL|GENERAL\", \"urgency\": \"URGENT|NORMAL\", \"summary\": \"3行以内の要約\", \"recommended_action\": \"推奨対応アクション\"}\n\n## 分類ルール\n- TECH: システム障害、バグ、操作方法、技術的な質問\n- BILLING: 請求、料金、返金、プラン変更、支払い\n- LEGAL: 契約変更、解約、利用規約、法的な問い合わせ\n- GENERAL: 上記に該当しないもの\n\n## 緊急度判定ルール\n- URGENT: システム停止・データ消失・セキュリティインシデント・サービス利用不可\n- NORMAL: 上記以外"
+        selected: false
+        title: "分類・判定"
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: llm
+      position:
+        x: 380
+        y: 282
+      positionAbsolute:
+        x: 380
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: "import json\n\ndef main(llm_output: str, user_query: str,\n         webhook_tech: str, webhook_billing: str,\n         webhook_legal: str, webhook_general: str) -> dict:\n\n    try:\n        data = json.loads(llm_output.strip())\n    except:\n        data = {\"category\": \"GENERAL\", \"urgency\": \"NORMAL\", \"summary\": user_query[:100], \"recommended_action\": \"担当者が確認してください\"}\n\n    category = data.get(\"category\", \"GENERAL\").upper()\n    urgency = data.get(\"urgency\", \"NORMAL\").upper()\n    summary = data.get(\"summary\", \"\")\n    action = data.get(\"recommended_action\", \"\")\n\n    category_names = {\n        \"TECH\": \"技術サポート\",\n        \"BILLING\": \"請求・料金\",\n        \"LEGAL\": \"契約・法務\",\n        \"GENERAL\": \"一般問い合わせ\"\n    }\n\n    webhooks = {\n        \"TECH\": webhook_tech,\n        \"BILLING\": webhook_billing,\n        \"LEGAL\": webhook_legal,\n        \"GENERAL\": webhook_general\n    }\n\n    dept_name = category_names.get(category, \"一般問い合わせ\")\n    webhook_url = webhooks.get(category, webhook_general)\n\n    urgency_icon = \"\\U0001f534 緊急\" if urgency == \"URGENT\" else \"\\U0001f7e1 通常\"\n    mention = \"<!channel> \" if urgency == \"URGENT\" else \"\"\n\n    slack_message = f\"{mention}\\U0001f4e8 問い合わせ通知\\n\\n*カテゴリ:* {dept_name}\\n*緊急度:* {urgency_icon}\\n\\n*要約:*\\n{summary}\\n\\n*推奨アクション:*\\n{action}\\n\\n*原文:*\\n{user_query[:500]}\"\n\n    display_result = f\"## 問い合わせ分類結果\\n\\n| 項目 | 結果 |\\n|------|------|\\n| **カテゴリ** | {dept_name} |\\n| **緊急度** | {urgency_icon} |\\n\\n### 要約\\n{summary}\\n\\n### 推奨アクション\\n{action}\\n\\n---\\n\\U0001f4e4 **{dept_name}チーム**のSlackチャンネルに通知を送信しました。\"\n\n    return {\n        \"webhook_url\": webhook_url,\n        \"slack_message\": slack_message,\n        \"display_result\": display_result,\n        \"urgency\": urgency\n    }\n"
+        code_language: python3
+        outputs:
+          display_result:
+            children: null
+            type: string
+          slack_message:
+            children: null
+            type: string
+          urgency:
+            children: null
+            type: string
+          webhook_url:
+            children: null
+            type: string
+        selected: false
+        title: "部署・URL判定"
+        type: code
+        variables:
+        - value_selector:
+          - llm
+          - text
+          variable: llm_output
+        - value_selector:
+          - sys
+          - query
+          variable: user_query
+        - value_selector:
+          - env
+          - SLACK_WEBHOOK_TECH
+          variable: webhook_tech
+        - value_selector:
+          - env
+          - SLACK_WEBHOOK_BILLING
+          variable: webhook_billing
+        - value_selector:
+          - env
+          - SLACK_WEBHOOK_LEGAL
+          variable: webhook_legal
+        - value_selector:
+          - env
+          - SLACK_WEBHOOK_GENERAL
+          variable: webhook_general
+      height: 200
+      id: '1740300000002'
+      position:
+        x: 680
+        y: 250
+      positionAbsolute:
+        x: 680
+        y: 250
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: is
+            id: cond-urgent
+            value: 'URGENT'
+            varType: string
+            variable_selector:
+            - '1740300000002'
+            - urgency
+          id: 'true'
+          logical_operator: and
+        selected: false
+        title: "緊急度分岐"
+        type: if-else
+      height: 179
+      id: '1740300000003'
+      position:
+        x: 980
+        y: 230
+      positionAbsolute:
+        x: 980
+        y: 230
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: '{"text": "{{#1740300000002.slack_message#}}"}'
+          type: json
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 100
+        selected: false
+        ssl_verify: true
+        timeout:
+          max_connect_timeout: 10
+          max_read_timeout: 10
+          max_write_timeout: 10
+        title: "Slack緊急通知"
+        type: http-request
+        url: '{{#1740300000002.webhook_url#}}'
+        variables: []
+      height: 154
+      id: '1740300000004'
+      position:
+        x: 1300
+        y: 130
+      positionAbsolute:
+        x: 1300
+        y: 130
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: '{"text": "{{#1740300000002.slack_message#}}"}'
+          type: json
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 100
+        selected: false
+        ssl_verify: true
+        timeout:
+          max_connect_timeout: 10
+          max_read_timeout: 10
+          max_write_timeout: 10
+        title: "Slack通常通知"
+        type: http-request
+        url: '{{#1740300000002.webhook_url#}}'
+        variables: []
+      height: 154
+      id: '1740300000005'
+      position:
+        x: 1300
+        y: 380
+      positionAbsolute:
+        x: 1300
+        y: 380
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: "{{#1740300000002.display_result#}}\n\n🔴 **緊急案件**として @channel メンション付きで通知しました。"
+        selected: false
+        title: "緊急回答"
+        type: answer
+        variables: []
+      height: 104
+      id: '1740300000006'
+      position:
+        x: 1600
+        y: 130
+      positionAbsolute:
+        x: 1600
+        y: 130
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: '{{#1740300000002.display_result#}}'
+        selected: false
+        title: "通常回答"
+        type: answer
+        variables: []
+      height: 102
+      id: answer
+      position:
+        x: 1600
+        y: 380
+      positionAbsolute:
+        x: 1600
+        y: 380
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: -50
+      y: -50
+      zoom: 0.6
+  rag_pipeline_variables: []

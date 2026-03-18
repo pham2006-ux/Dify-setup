@@ -1,0 +1,14 @@
+{
+  "name": "mcp-url-tracker",
+  "version": "1.0.0",
+  "description": "MCP server for portfolio tracking URL management via Supabase",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@supabase/supabase-js": "^2.0.0"
+  }
+}

@@ -1,0 +1,252 @@
+app:
+  description: '要件テキストから品目・単価・数量を構造化し、消費税計算を含む見積書ドラフトを自動生成。'
+  icon: "\U0001F4B4"
+  icon_background: '#FFF8E1'
+  mode: advanced-chat
+  name: "見積書作成支援ボット"
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.7.4@5faf411e694e0da130a337347a625a3812b1b7502a0183382d66d92c841bf05a
+    version: null
+kind: app
+version: 0.5.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: "💴 見積書作成支援ボットです。\n\nお客様への見積もり内容を入力してください。\n品目・数量・単価を自動で構造化し、見積書ドラフトを生成します。\n\n💡 入力例：\n「A社向け。Webサイト制作一式80万円、ロゴデザイン15万円、月額保守3万円×12ヶ月」"
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions:
+    - "A社向け。システム開発200万、テスト50万、保守月額5万×12ヶ月。件名はECサイト構築"
+    - "デザイン制作の見積もり：LP制作30万、バナー制作5万円×10本、写真撮影15万。宛先はB商事"
+    - "前の見積書に「ドメイン取得1万円」を追加して"
+    suggested_questions_after_answer:
+      enabled: true
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1740800000001-source-llm-target
+      source: '1740800000001'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: llm-source-1740800000002-target
+      source: llm
+      sourceHandle: source
+      target: '1740800000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: template-transform
+      id: 1740800000002-source-1740800000003-target
+      source: '1740800000002'
+      sourceHandle: source
+      target: '1740800000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: template-transform
+        targetType: answer
+      id: 1740800000003-source-answer-target
+      source: '1740800000003'
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: "ユーザー入力"
+        type: start
+        variables: []
+      height: 73
+      id: '1740800000001'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+        memory:
+          query_prompt_template: '{{#sys.query#}}
+
+
+            {{#sys.files#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: true
+            size: 10
+        model:
+          completion_params:
+            temperature: 0.2
+          mode: chat
+          name: gemini-2.5-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: prompt-estimate-system
+          role: system
+          text: "あなたは見積書作成の専門アシスタントです。\n\nユーザーの入力から見積もり情報を抽出し、以下のJSON形式のみを出力してください。\n他のテキストは一切出力しないでください。\n\n{\n  \"client_name\": \"宛先の会社名（不明なら空文字）\",\n  \"subject\": \"見積件名\",\n  \"items\": [\n    {\n      \"name\": \"品目名\",\n      \"quantity\": 数量,\n      \"unit\": \"単位（式/個/月/回等）\",\n      \"unit_price\": 単価（税抜・数値のみ）\n    }\n  ],\n  \"notes\": \"備考（あれば）\"\n}\n\nルール：\n- 金額は全て税抜で計算\n- 「一式」は quantity: 1, unit: \"式\"\n- 「×12ヶ月」は quantity: 12, unit: \"月\"\n- 件名が不明な場合は内容から推定"
+        selected: false
+        title: "要件構造化"
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: llm
+      position:
+        x: 380
+        y: 282
+      positionAbsolute:
+        x: 380
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: "import json\n\ndef main(llm_output: str) -> dict:\n    try:\n        data = json.loads(llm_output.strip())\n    except:\n        return {\n            \"estimate_text\": \"見積もり情報の解析に失敗しました。内容を再度入力してください。\"\n        }\n    \n    client = data.get(\"client_name\", \"\") or \"○○株式会社\"\n    subject = data.get(\"subject\", \"御見積\")\n    items = data.get(\"items\", [])\n    notes = data.get(\"notes\", \"\")\n    \n    table_rows = \"\"\n    subtotal = 0\n    for i, item in enumerate(items, 1):\n        name = item.get(\"name\", \"\")\n        qty = int(item.get(\"quantity\", 1))\n        unit = item.get(\"unit\", \"式\")\n        price = int(item.get(\"unit_price\", 0))\n        amount = qty * price\n        subtotal += amount\n        table_rows += f\"| {i} | {name} | {qty} | {unit} | \\u00a5{price:,} | \\u00a5{amount:,} |\\n\"\n    \n    tax = int(subtotal * 0.1)\n    total = subtotal + tax\n    \n    estimate = f\"## \\U0001f4b4 御見積書\\n\\n\"\n    estimate += f\"**宛先：** {client} 御中\\n\"\n    estimate += f\"**件名：** {subject}\\n\\n\"\n    estimate += f\"| No. | 品目 | 数量 | 単位 | 単価（税抜） | 金額 |\\n\"\n    estimate += f\"|-----|------|------|------|------------|------|\\n\"\n    estimate += table_rows\n    estimate += f\"\\n---\\n\\n\"\n    estimate += f\"| | |\\n|------|------|\\n\"\n    estimate += f\"| **小計** | \\u00a5{subtotal:,} |\\n\"\n    estimate += f\"| **消費税（10%）** | \\u00a5{tax:,} |\\n\"\n    estimate += f\"| **合計（税込）** | **\\u00a5{total:,}** |\\n\\n\"\n    estimate += f\"**有効期限：** 発行日より30日間\\n\"\n    if notes:\n        estimate += f\"\\n**備考：**\\n{notes}\\n\"\n    estimate += f\"\\n---\\n\\U0001f4dd 修正が必要な場合は「○○を変更して」とお伝えください。\"\n    \n    return {\n        \"estimate_text\": estimate\n    }\n"
+        code_language: python3
+        outputs:
+          estimate_text:
+            children: null
+            type: string
+        selected: false
+        title: "金額計算"
+        type: code
+        variables:
+        - value_selector:
+          - llm
+          - text
+          variable: llm_output
+      height: 200
+      id: '1740800000002'
+      position:
+        x: 680
+        y: 250
+      positionAbsolute:
+        x: 680
+        y: 250
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        selected: false
+        template: "{{ estimate_text }}"
+        title: "見積書フォーマット"
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1740800000002'
+          - estimate_text
+          variable: estimate_text
+      height: 52
+      id: '1740800000003'
+      position:
+        x: 980
+        y: 282
+      positionAbsolute:
+        x: 980
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: '{{#1740800000003.output#}}'
+        selected: false
+        title: "回答"
+        type: answer
+        variables: []
+      height: 102
+      id: answer
+      position:
+        x: 1280
+        y: 282
+      positionAbsolute:
+        x: 1280
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 100
+      y: 50
+      zoom: 0.8
+  rag_pipeline_variables: []

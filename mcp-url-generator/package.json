@@ -1,0 +1,12 @@
+{
+  "name": "mcp-url-generator",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "latest",
+    "@supabase/supabase-js": "^2.99.0"
+  }
+}

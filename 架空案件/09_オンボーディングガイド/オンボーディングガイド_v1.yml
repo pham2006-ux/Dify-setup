@@ -1,0 +1,224 @@
+app:
+  description: '新入社員の入社手続き・IT環境設定・社内制度について、ナレッジベースを参照してステップバイステップでガイドするボット。'
+  icon: "\U0001F393"
+  icon_background: '#E8F5E9'
+  mode: advanced-chat
+  name: "新人オンボーディングガイド"
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.7.4@5faf411e694e0da130a337347a625a3812b1b7502a0183382d66d92c841bf05a
+    version: null
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/jina:0.0.16@8466270487ebad423f555bee45e7146cef8f5ab9fb9d1869f224931f5f3ae4f9
+    version: null
+kind: app
+version: 0.5.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: "🎓 新人オンボーディングガイドボットです！\nようこそ、CyberNova株式会社へ！\n\n入社に関する手続きやシステム設定について、何でもお気軽にご質問ください。\n\n📌 対応カテゴリ：\n📋 入社手続き — 必要書類、提出期限、保険手続き\n💻 IT環境設定 — PC、メール、VPN、アカウント\n📊 社内制度 — 勤怠、経費精算、福利厚生\n🏢 オフィス案内 — 入館証、座席、会議室、施設\n📞 連絡先 — 各部署窓口、緊急連絡先\n\n※ ナレッジベースの設定が必要です（インポート後、手動で選択してください）"
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions:
+    - "入社初日に持参するものを教えてください"
+    - "社内メールの設定方法を教えてください"
+    - "有給休暇はいつから使えますか？"
+    suggested_questions_after_answer:
+      enabled: true
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: knowledge-retrieval
+      id: 1740900000001-source-1740900000002-target
+      source: '1740900000001'
+      sourceHandle: source
+      target: '1740900000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1740900000002-source-llm-target
+      source: '1740900000002'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        sourceType: llm
+        targetType: answer
+      id: llm-answer
+      source: llm
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+    nodes:
+    - data:
+        selected: false
+        title: "ユーザー入力"
+        type: start
+        variables: []
+      height: 73
+      id: '1740900000001'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        dataset_ids: []
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: reranking_model
+          reranking_model:
+            model: jina-reranker-v3
+            provider: langgenius/jina/jina
+          top_k: 5
+        query_attachment_selector: []
+        query_variable_selector:
+        - sys
+        - query
+        retrieval_mode: multiple
+        selected: false
+        title: "オンボーディング検索"
+        type: knowledge-retrieval
+      height: 90
+      id: '1740900000002'
+      position:
+        x: 380
+        y: 282
+      positionAbsolute:
+        x: 380
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1740900000002'
+          - result
+        memory:
+          query_prompt_template: '{{#sys.query#}}
+
+
+            {{#sys.files#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: true
+            size: 10
+        model:
+          completion_params:
+            temperature: 0.3
+          mode: chat
+          name: gemini-2.5-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: prompt-onboarding-system
+          role: system
+          text: "# Role\nあなたはCyberNova株式会社の新人オンボーディングアシスタントです。\n新入社員や中途入社社員の質問に、社内ナレッジベースを参照して丁寧に回答します。\n\n# Objective\n1. 新入社員が迷わないよう、ステップバイステップで具体的に案内する\n2. ナレッジベースの情報を正確に引用して回答する\n3. 情報がない場合は担当部署への連絡先を案内する\n\n# ナレッジベース（コンテキスト）\n{{#context#}}\n\n# Style\n- フレンドリーで親しみやすいトーン（ただし敬語）\n- 手順は番号付きリストで分かりやすく\n- 重要な期限や注意事項は⚠️マークで強調\n- 関連する他の情報も「💡 ヒント」として追加\n\n# Response Structure\n回答は以下の構成で出力：\n\n1. **回答**: 質問への直接的な回答\n2. **手順**: 必要な場合はステップバイステップで\n3. **注意事項**: 期限や制限がある場合\n4. **💡 ヒント**: 関連する便利な情報\n5. **問い合わせ先**: 追加質問がある場合の連絡先\n\n# 回答不可時\nナレッジベースに情報がない場合：\n- 「申し訳ございません、この情報はナレッジベースにございません」と伝える\n- 該当しそうな部署の連絡先を案内する\n  - IT関連 → IT部門（内線: 2000）\n  - 人事関連 → 人事部（内線: 3000）\n  - 総務関連 → 総務部（内線: 4000）\n\n# 制約\n- ナレッジベースの情報のみで回答し、推測しない\n- 個人情報（給与、評価）には回答しない"
+        selected: false
+        title: "ガイド回答生成"
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: llm
+      position:
+        x: 680
+        y: 282
+      positionAbsolute:
+        x: 680
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: '{{#llm.text#}}'
+        selected: false
+        title: "回答"
+        type: answer
+        variables: []
+      height: 102
+      id: answer
+      position:
+        x: 980
+        y: 282
+      positionAbsolute:
+        x: 980
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 151.5
+      y: 63.5
+      zoom: 1
+  rag_pipeline_variables: []

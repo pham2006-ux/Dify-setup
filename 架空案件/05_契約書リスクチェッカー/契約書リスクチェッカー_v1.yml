@@ -1,0 +1,354 @@
+app:
+  description: '契約書テキストからリスク条項を自動検出し、リスクスコアを算出。高リスク時はSlack経由で法務部に緊急アラートを送信。'
+  icon: "\u2696\uFE0F"
+  icon_background: '#FCE4EC'
+  mode: advanced-chat
+  name: "契約書リスクチェッカー"
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.7.4@5faf411e694e0da130a337347a625a3812b1b7502a0183382d66d92c841bf05a
+    version: null
+kind: app
+version: 0.5.0
+workflow:
+  conversation_variables: []
+  environment_variables:
+  - description: "Slack Webhook - 法務部（高リスク通知用）"
+    id: env-slack-legal
+    name: SLACK_WEBHOOK_LEGAL
+    selector:
+    - env
+    - SLACK_WEBHOOK_LEGAL
+    value: ''
+    value_type: secret
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: "⚖️ 契約書リスクチェッカーです。\n\n契約書のテキストを貼り付けてください。\n以下の観点で自動リスクチェックを実行します：\n\n🔍 違約金・損害賠償条項\n🔍 自動更新・解約条件\n🔍 競業避止・秘密保持\n🔍 免責・瑕疵担保責任\n🔍 準拠法・管轄裁判所\n\n⚠️ 高リスク検出時はSlackで法務部に自動通知します。"
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions:
+    - "この契約書のリスクをチェックしてください"
+    suggested_questions_after_answer:
+      enabled: true
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1740500000001-source-llm-target
+      source: '1740500000001'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: llm-source-1740500000002-target
+      source: llm
+      sourceHandle: source
+      target: '1740500000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: if-else
+      id: 1740500000002-source-1740500000003-target
+      source: '1740500000002'
+      sourceHandle: source
+      target: '1740500000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: http-request
+      id: 1740500000003-true-1740500000004-target
+      source: '1740500000003'
+      sourceHandle: 'true'
+      target: '1740500000004'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: answer
+      id: 1740500000003-false-answer-target
+      source: '1740500000003'
+      sourceHandle: 'false'
+      target: answer
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: http-request
+        targetType: answer
+      id: 1740500000004-source-1740500000005-target
+      source: '1740500000004'
+      sourceHandle: source
+      target: '1740500000005'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: "ユーザー入力"
+        type: start
+        variables: []
+      height: 73
+      id: '1740500000001'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+        memory:
+          query_prompt_template: '{{#sys.query#}}
+
+
+            {{#sys.files#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: true
+            size: 10
+        model:
+          completion_params:
+            temperature: 0.2
+          mode: chat
+          name: gemini-2.5-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: prompt-contract-system
+          role: system
+          text: "あなたは契約書リスク分析の専門家です。\n\n契約書テキストを分析し、以下のJSON形式のみを出力してください。\n他のテキストは一切出力しないでください。\n\n{\n  \"risks\": [\n    {\n      \"category\": \"金銭|期間|競業|責任|法的\",\n      \"item\": \"リスク条項名\",\n      \"detail\": \"具体的な内容\",\n      \"severity\": \"high|medium|low\",\n      \"recommendation\": \"推奨アクション\"\n    }\n  ],\n  \"overall_comment\": \"契約書全体の所見\"\n}\n\n## チェックポイント\n- 違約金・損害賠償の上限が不当に高くないか\n- 自動更新条項と解約通知期間は適切か\n- 競業避止義務の範囲が過度に広くないか\n- 免責条項に不利な内容がないか\n- 知的財産権の帰属は明確か\n- 準拠法・管轄裁判所は自社に不利でないか\n- 反社条項は含まれているか\n\n## severityの判定基準\n- high: 法務部の詳細レビュー必要（違約金上限なし、一方的な免責、不利な管轄等）\n- medium: 注意が必要だが交渉可能\n- low: 一般的な条項で問題なし"
+        selected: false
+        title: "リスク条項抽出"
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: llm
+      position:
+        x: 380
+        y: 282
+      positionAbsolute:
+        x: 380
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: "import json\n\ndef main(llm_output: str) -> dict:\n    try:\n        data = json.loads(llm_output.strip())\n    except:\n        return {\n            \"risk_level\": \"UNKNOWN\",\n            \"risk_score\": 0,\n            \"display_result\": \"契約書の解析に失敗しました。テキストを再度貼り付けてください。\",\n            \"slack_message\": \"\"\n        }\n\n    risks = data.get(\"risks\", [])\n    overall = data.get(\"overall_comment\", \"\")\n    \n    severity_scores = {\"high\": 30, \"medium\": 15, \"low\": 5}\n    total_score = sum(severity_scores.get(r.get(\"severity\", \"low\"), 5) for r in risks)\n    total_score = min(total_score, 100)\n    \n    if total_score >= 70:\n        risk_level = \"HIGH\"\n        level_icon = \"\\U0001f534 高リスク\"\n    elif total_score >= 40:\n        risk_level = \"MEDIUM\"\n        level_icon = \"\\U0001f7e1 中リスク\"\n    else:\n        risk_level = \"LOW\"\n        level_icon = \"\\U0001f7e2 低リスク\"\n    \n    severity_icons = {\"high\": \"\\U0001f534\", \"medium\": \"\\U0001f7e1\", \"low\": \"\\U0001f7e2\"}\n    \n    risk_items = \"\"\n    for r in risks:\n        icon = severity_icons.get(r.get(\"severity\", \"low\"), \"\\U0001f7e2\")\n        risk_items += f\"\\n### {icon} {r.get('item', '不明')}\\n\"\n        risk_items += f\"- **カテゴリ**: {r.get('category', '不明')}\\n\"\n        risk_items += f\"- **詳細**: {r.get('detail', '')}\\n\"\n        risk_items += f\"- **推奨**: {r.get('recommendation', '')}\\n\"\n    \n    display_result = f\"## \\u2696\\uFE0F 契約書リスクチェック結果\\n\\n\"\n    display_result += f\"| 項目 | 結果 |\\n|------|------|\\n\"\n    display_result += f\"| **リスクレベル** | {level_icon} |\\n\"\n    display_result += f\"| **リスクスコア** | {total_score}/100 |\\n\"\n    display_result += f\"| **検出リスク数** | {len(risks)}件 |\\n\"\n    display_result += f\"\\n---\\n{risk_items}\\n\"\n    display_result += f\"\\n### 総合所見\\n{overall}\"\n    \n    slack_message = f\"\\u2696\\uFE0F 契約書リスクアラート\\n\\n*リスクレベル:* {level_icon}\\n*スコア:* {total_score}/100\\n*検出リスク:* {len(risks)}件\\n\\n{overall}\\n\\n_法務部での詳細レビューをお願いします。_\"\n    \n    return {\n        \"risk_level\": risk_level,\n        \"risk_score\": total_score,\n        \"display_result\": display_result,\n        \"slack_message\": slack_message\n    }\n"
+        code_language: python3
+        outputs:
+          display_result:
+            children: null
+            type: string
+          risk_level:
+            children: null
+            type: string
+          risk_score:
+            children: null
+            type: number
+          slack_message:
+            children: null
+            type: string
+        selected: false
+        title: "リスクスコアリング"
+        type: code
+        variables:
+        - value_selector:
+          - llm
+          - text
+          variable: llm_output
+      height: 200
+      id: '1740500000002'
+      position:
+        x: 680
+        y: 250
+      positionAbsolute:
+        x: 680
+        y: 250
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: is
+            id: cond-high-risk
+            value: 'HIGH'
+            varType: string
+            variable_selector:
+            - '1740500000002'
+            - risk_level
+          id: 'true'
+          logical_operator: and
+        selected: false
+        title: "リスクレベル判定"
+        type: if-else
+      height: 179
+      id: '1740500000003'
+      position:
+        x: 980
+        y: 230
+      positionAbsolute:
+        x: 980
+        y: 230
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: '{"text": "{{#1740500000002.slack_message#}}"}'
+          type: json
+        headers: 'Content-Type: application/json'
+        method: post
+        params: ''
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 100
+        selected: false
+        ssl_verify: true
+        timeout:
+          max_connect_timeout: 10
+          max_read_timeout: 10
+          max_write_timeout: 10
+        title: "Slack法務部通知"
+        type: http-request
+        url: '{{#env.SLACK_WEBHOOK_LEGAL#}}'
+        variables: []
+      height: 154
+      id: '1740500000004'
+      position:
+        x: 1300
+        y: 150
+      positionAbsolute:
+        x: 1300
+        y: 150
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: "{{#1740500000002.display_result#}}\n\n---\n🔴 **高リスク案件**のため、法務部のSlackチャンネルに自動通知しました。\n法務部からの連絡をお待ちください。"
+        selected: false
+        title: "高リスク回答"
+        type: answer
+        variables: []
+      height: 104
+      id: '1740500000005'
+      position:
+        x: 1600
+        y: 150
+      positionAbsolute:
+        x: 1600
+        y: 150
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: '{{#1740500000002.display_result#}}'
+        selected: false
+        title: "通常回答"
+        type: answer
+        variables: []
+      height: 102
+      id: answer
+      position:
+        x: 1300
+        y: 380
+      positionAbsolute:
+        x: 1300
+        y: 380
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: -50
+      y: -50
+      zoom: 0.6
+  rag_pipeline_variables: []

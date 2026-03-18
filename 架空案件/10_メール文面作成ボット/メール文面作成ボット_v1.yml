@@ -1,0 +1,175 @@
+app:
+  description: 'ビジネスメールの文面を自動生成。お礼・依頼・謝罪・報告など多様なシーンに対応。トーン調整と修正指示にも対応。'
+  icon: "\u2709\uFE0F"
+  icon_background: '#EFEBE9'
+  mode: advanced-chat
+  name: "メール文面作成ボット"
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.7.4@5faf411e694e0da130a337347a625a3812b1b7502a0183382d66d92c841bf05a
+    version: null
+kind: app
+version: 0.5.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: "✉️ メール文面作成ボットです。\n\n送りたいメールの内容を教えてください。\nビジネスメールの文面を自動生成します！\n\n📌 対応メールタイプ：\n🙏 お礼 — 打ち合わせ後、受注後\n📩 依頼 — 見積依頼、資料送付依頼\n🙇 謝罪 — 納期遅延、不具合報告\n📊 報告 — 進捗報告、完了報告\n📢 案内 — 会議案内、変更通知\n🔄 フォローアップ — リマインド\n\n💡 入力例：\n「A社の田中さんに、先日の打ち合わせのお礼メールを書いて。次回は来週水曜で提案」"
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions:
+    - "A社の田中様に打ち合わせのお礼メールを作成して"
+    - "納期が3日遅延する旨の謝罪メールを書いてください。宛先はB社の鈴木部長"
+    - "前のメールをもう少しカジュアルなトーンに変えて"
+    suggested_questions_after_answer:
+      enabled: true
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1741000000001-source-llm-target
+      source: '1741000000001'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        sourceType: llm
+        targetType: answer
+      id: llm-answer
+      source: llm
+      sourceHandle: source
+      target: answer
+      targetHandle: target
+      type: custom
+    nodes:
+    - data:
+        selected: false
+        title: "ユーザー入力"
+        type: start
+        variables: []
+      height: 73
+      id: '1741000000001'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+        memory:
+          query_prompt_template: '{{#sys.query#}}
+
+
+            {{#sys.files#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: true
+            size: 10
+        model:
+          completion_params:
+            temperature: 0.4
+          mode: chat
+          name: gemini-2.5-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: prompt-email-system
+          role: system
+          text: "# Role\nあなたはビジネスメール作成の専門アシスタントです。\nユーザーの指示に基づいて、適切なビジネスメールの文面を生成します。\n\n# Objective\n1. ユーザーの入力から、メールの種類・宛先・内容・トーンを判断する\n2. 日本のビジネスマナーに沿った適切なメール文面を生成する\n3. 修正指示にも柔軟に対応する\n\n# Output Format\n以下の形式で出力してください：\n\n---\n✉️ **メール文面**\n\n**件名：** [件名]\n\n---\n\n[宛名]\n\nお世話になっております。\n[挨拶・導入]\n\n[本題]\n\n[結び]\n\n[署名欄]\n○○株式会社\n○○部 ○○（要記入）\nTEL: xxx-xxxx-xxxx\nEmail: xxx@example.com\n\n---\n💡 修正が必要な場合は「もっとフォーマルに」「結びを変えて」などとお伝えください。\n\n# トーン判定ルール\n- 「社外」「お客様」「取引先」→ フォーマル（最上級敬語）\n- 明示的な指定なし → スタンダード（標準ビジネス敬語）\n- 「社内」「カジュアル」「砕けた」→ セミカジュアル\n\n# メールタイプ別ルール\n\n## お礼メール\n- 具体的な感謝ポイントを明記\n- 次のアクションやフォローアップを含める\n\n## 依頼メール\n- 依頼内容を明確に記載\n- 期限がある場合は明記\n- 「お忙しいところ恐れ入りますが」等のクッション言葉\n\n## 謝罪メール\n- まず率直に謝罪\n- 原因の簡潔な説明\n- 具体的な対応策・再発防止策\n- お詫びの言葉で結ぶ\n\n## 報告メール\n- 結論から先に述べる\n- 箇条書きで分かりやすく\n- 数値やデータがあれば含む\n\n## 案内メール\n- 5W1H（いつ・どこで・何を等）を明確に\n- 出欠確認の案内（該当する場合）\n\n## フォローアップ\n- 前回のやりとりを簡潔に参照\n- 催促にならないよう配慮した表現\n\n# 制約\n- メール文面は日本語で出力\n- 署名の個人情報は「要記入」として空欄にする\n- 1通のメールとして完結した内容にする"
+        selected: false
+        title: "メール生成"
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: llm
+      position:
+        x: 380
+        y: 282
+      positionAbsolute:
+        x: 380
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        answer: '{{#llm.text#}}'
+        selected: false
+        title: "回答"
+        type: answer
+        variables: []
+      height: 102
+      id: answer
+      position:
+        x: 680
+        y: 282
+      positionAbsolute:
+        x: 680
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 151.5
+      y: 63.5
+      zoom: 1
+  rag_pipeline_variables: []

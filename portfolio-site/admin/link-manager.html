@@ -286,6 +286,9 @@
   <div id="toast" class="toast">URLをコピーしました！</div>
 
   <script>
+    // --- オーナーフラグ設定（Adminページアクセス = オーナー本人） ---
+    localStorage.setItem('posthog_opt_out', 'true');
+
     // --- Configuration ---
     // The base URL of your deployed site
     const BASE_URL = 'https://portfolio-site-copy.vercel.app/';

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://my-portfolio-site-kappa-sooty.vercel.app/$1",
+      "permanent": false
+    }
+  ]
+}

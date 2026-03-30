@@ -60,7 +60,7 @@ module.exports = async function handler(req, res) {
   try {
     const data = await resend.emails.send({
       from: 'Portfolio <onboarding@resend.dev>',
-      to: 'minhhuypham2006@gmail.com',
+      to: 'phamminhhuy2006@icloud.com',
       subject: `【ポートフォリオ】${company || '個人'} ${name}様からのお問い合わせ`,
       html: `
         <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">

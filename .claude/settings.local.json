@@ -15,7 +15,12 @@
       "WebSearch",
       "WebFetch(domain:docs.google.com)",
       "WebFetch(domain:doc-0c-6s-sheets.googleusercontent.com)",
-      "mcp__9b63734e-3bc2-4e10-bda3-97cbc8b83276__restore_project"
+      "mcp__9b63734e-3bc2-4e10-bda3-97cbc8b83276__restore_project",
+      "WebFetch(domain:portfolio-site-eight-sepia-66.vercel.app)",
+      "WebFetch(domain:portfolio-site-4559.vercel.app)",
+      "mcp__8bd70371-9c3c-47e1-879e-65de25e13edd__list_teams",
+      "mcp__8bd70371-9c3c-47e1-879e-65de25e13edd__list_projects",
+      "mcp__8bd70371-9c3c-47e1-879e-65de25e13edd__get_project"
     ]
   }
 }

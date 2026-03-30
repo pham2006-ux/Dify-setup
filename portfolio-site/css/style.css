@@ -835,6 +835,234 @@ img {
   }
 }
 
+/* ====================================== */
+/* About Section - Renovated              */
+/* ====================================== */
+
+.about-hero {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  margin-bottom: 72px;
+}
+
+.about-hero-image {
+  flex-shrink: 0;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--accent-primary);
+  box-shadow: 0 0 40px rgba(108, 99, 255, 0.35);
+}
+
+.about-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-secondary);
+  margin-bottom: 8px;
+}
+
+.about-name {
+  font-size: 2.4rem;
+  font-weight: 800;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.about-tagline {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin-bottom: 20px;
+}
+
+.about-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.about-tag {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 100px;
+  padding: 5px 14px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  transition: border-color var(--transition-fast);
+}
+
+.about-tag:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+/* Story Timeline */
+.story-section {
+  margin-bottom: 64px;
+}
+
+.story-heading {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.story-line {
+  position: relative;
+  padding-left: 80px;
+}
+
+.story-line::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 24px;
+  bottom: 24px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent-primary), var(--accent-secondary));
+  opacity: 0.25;
+}
+
+.story-chapter {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.story-chapter:last-child {
+  margin-bottom: 0;
+}
+
+.chapter-num {
+  position: absolute;
+  left: -80px;
+  top: 18px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--accent-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(108, 99, 255, 0.35);
+  flex-shrink: 0;
+}
+
+.chapter-body {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  padding: 22px 28px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.chapter-body:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-glow);
+  transform: translateX(4px);
+}
+
+.chapter-body h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.chapter-body p {
+  font-size: 0.93rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* Strengths block */
+.strengths-block {
+  margin-top: 8px;
+}
+
+/* ====================================== */
+/* Quote Section                          */
+/* ====================================== */
+
+.quote-section {
+  padding: 100px 0;
+  background: var(--bg-secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+.quote-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(108, 99, 255, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.quote-block {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+}
+
+.quote-icon {
+  font-size: 7rem;
+  line-height: 0.7;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: Georgia, 'Times New Roman', serif;
+  display: block;
+  margin-bottom: 20px;
+  opacity: 0.55;
+}
+
+.quote-text {
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 2.1;
+  color: var(--text-primary);
+  font-style: normal;
+  margin-bottom: 28px;
+}
+
+.quote-author {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  font-style: italic;
+  letter-spacing: 0.06em;
+}
+
 /* Small devices (landscape phones, less than 768px) */
 @media (max-width: 768px) {
   .hero {
@@ -900,6 +1128,49 @@ img {
   .strengths-grid {
     grid-template-columns: 1fr; /* Stack items on small screens */
   }
+
+  /* About hero - responsive */
+  .about-hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 28px;
+    margin-bottom: 48px;
+  }
+
+  .about-tags {
+    justify-content: center;
+  }
+
+  .about-name {
+    font-size: 2rem;
+  }
+
+  /* Story timeline - responsive */
+  .story-line {
+    padding-left: 60px;
+  }
+
+  .story-line::before {
+    left: 20px;
+  }
+
+  .chapter-num {
+    left: -60px;
+    width: 40px;
+    height: 40px;
+    font-size: 0.7rem;
+  }
+
+  /* Quote - responsive */
+  .quote-text {
+    font-size: 1.1rem;
+    line-height: 2;
+  }
+
+  .quote-section {
+    padding: 64px 0;
+  }
 }
 
 /* Extra small devices (portrait phones, less than 576px) */
@@ -922,5 +1193,46 @@ img {
 
   .about-image {
     max-width: 220px;
+  }
+
+  /* About Hero responsive */
+  .about-hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 28px;
+  }
+
+  .about-tags {
+    justify-content: center;
+  }
+
+  .about-name {
+    font-size: 1.8rem;
+  }
+
+  /* Story responsive */
+  .story-line {
+    padding-left: 56px;
+  }
+
+  .story-line::before {
+    left: 18px;
+  }
+
+  .chapter-num {
+    left: -56px;
+    width: 38px;
+    height: 38px;
+    font-size: 0.72rem;
+  }
+
+  /* Quote responsive */
+  .quote-text {
+    font-size: 1.05rem;
+  }
+
+  .quote-icon {
+    font-size: 6rem;
   }
 }

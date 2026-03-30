@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs ls:*)",
+      "Bash(grep -E \"\\\\.\\(html|js|json\\)$\")",
+      "Bash(grep -r \"PostHog\\\\|posthog\" /c/Users/phamm/Desktop/Dify-setup-new/portfolio-site/ --include=\"*.html\" --include=\"*.js\" ! -path \"*/node_modules/*\")",
+      "Bash(find /tmp/dify -type d -name *dsl* -o -type d -name *export* -o -type d -name *schema*)",
+      "Bash(xargs grep:*)",
+      "Bash(grep -r 'class BuiltinNodeTypes' /tmp/dify --include=*.py)",
+      "Bash(grep -r \"http.*request\\\\|google.*sheets\" /tmp/dify/api/core/workflow/nodes --include=*.py -l)",
+      "Bash(find /tmp/dify/api -type f -name *.md)",
+      "mcp__9b63734e-3bc2-4e10-bda3-97cbc8b83276__list_tables",
+      "mcp__9b63734e-3bc2-4e10-bda3-97cbc8b83276__list_projects",
+      "mcp__c1fc4002-5f49-5f9d-a4e5-93c4ef5d6a75__google_drive_search",
+      "WebSearch",
+      "WebFetch(domain:docs.google.com)",
+      "WebFetch(domain:doc-0c-6s-sheets.googleusercontent.com)",
+      "mcp__9b63734e-3bc2-4e10-bda3-97cbc8b83276__restore_project"
+    ]
+  }
+}

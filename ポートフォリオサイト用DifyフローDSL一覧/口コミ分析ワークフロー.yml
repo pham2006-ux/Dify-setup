@@ -1,0 +1,478 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  icon_type: emoji
+  mode: workflow
+  name: 口コミ分析ワークフロー
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.7.20@de0063a630a6d1b2c025fb84f3462ba5151fb60618309cd595c3f4711b1df847
+    version: null
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: omluc/google_sheets:0.0.2@17f06eaa1d905595e1a76460e7249707a722142353d551cf14aed3d8517c134f
+    version: null
+kind: app
+version: 0.6.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 50
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1774705029860-source-1774705026551-target
+      source: '1774705029860'
+      sourceHandle: source
+      target: '1774705026551'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: llm
+      id: 1774761497135-source-1774705029860-target
+      source: '1774761497135'
+      sourceHandle: source
+      target: '1774705029860'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: tool
+        targetType: code
+      id: 1774761545765-source-1774761497135-target
+      source: '1774761545765'
+      sourceHandle: source
+      target: '1774761497135'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: tool
+      id: 1774704916992-source-1774761545765-target
+      source: '1774704916992'
+      sourceHandle: source
+      target: '1774761545765'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: ユーザー入力
+        type: start
+        variables:
+        - hint: ''
+          label: 分析したいデータの月を教えて下さい。
+          options:
+          - 10月
+          - 11月
+          - 12月
+          - 1月
+          - 2月
+          - 3月
+          placeholder: ''
+          required: true
+          type: select
+          variable: target_month
+      height: 110
+      id: '1774704916992'
+      position:
+        x: 121.42857142857142
+        y: 5
+      positionAbsolute:
+        x: 121.42857142857142
+        y: 5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        outputs:
+        - value_selector:
+          - '1774705029860'
+          - text
+          value_type: string
+          variable: text
+        selected: false
+        title: 出力
+        type: end
+      height: 89
+      id: '1774705026551'
+      position:
+        x: 1668
+        y: 26
+      positionAbsolute:
+        x: 1668
+        y: 26
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1774761497135'
+          - result
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gemini-3-flash-preview
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: 0d98d5de-d182-40b4-a2ab-7719104a1bdb
+          role: system
+          text: 'あなたは優秀なデータアナリストです。
+
+            コンテキストから、現状改善すべき点とこれからも伸ばしていく・維持していくべき所を教えて下さい。
+
+            また、次にするべきネクストアクション3つを具体で教えて下さい。
+
+
+            【コンテキスト】
+
+            {{#context#}}'
+        selected: false
+        title: LLM
+        type: llm
+        vision:
+          enabled: false
+      height: 89
+      id: '1774705029860'
+      position:
+        x: 1326
+        y: 26
+      positionAbsolute:
+        x: 1326
+        y: 26
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: "def main(arg1: str) -> dict:\n    import json\n    \n    try:\n   \
+          \     data = json.loads(arg1)\n    except Exception:\n        return {\"\
+          formatted_data\": \"データの読み込みに失敗しました\"}\n        \n    # プラグインの出力から実際のセルの値（二次元配列）だけを取り出す\n\
+          \    rows = []\n    if isinstance(data, dict):\n        value_ranges = data.get(\"\
+          valueRanges\", [])\n        if value_ranges and isinstance(value_ranges,\
+          \ list):\n            rows = value_ranges[0].get(\"values\", [])\n     \
+          \   else:\n            rows = data.get(\"values\", [])\n            \n \
+          \   if not rows:\n        return {\"formatted_data\": \"データが空です\"}\n   \
+          \     \n    # LLMに渡すために整形済みの文字列として出力\n    return {\n        \"formatted_data\"\
+          : json.dumps(rows, ensure_ascii=False)\n    }"
+        code_language: python3
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: true
+        title: コード実行
+        type: code
+        variables:
+        - value_selector:
+          - '1774761545765'
+          - text
+          value_type: string
+          variable: arg1
+      height: 53
+      id: '1774761497135'
+      position:
+        x: 984
+        y: 44
+      positionAbsolute:
+        x: 984
+        y: 44
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        is_team_authorization: true
+        paramSchemas:
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: The ID of the Google Sheet (found in the URL)
+            ja_JP: The ID of the Google Sheet (found in the URL)
+            pt_BR: O ID da planilha Google (encontrado na URL)
+            zh_Hans: Google 表格的 ID（在 URL 中）
+          label:
+            en_US: Spreadsheet ID
+            ja_JP: Spreadsheet ID
+            pt_BR: ID da Planilha
+            zh_Hans: 表格 ID
+          llm_description: The ID of the Google Sheet, which can be found in the sheet's
+            URL
+          max: null
+          min: null
+          name: spreadsheet_id
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: List of ranges to retrieve (e.g. ["Sheet1!A1:C3", "Sheet2!B2:D4"])
+            ja_JP: List of ranges to retrieve (e.g. ["Sheet1!A1:C3", "Sheet2!B2:D4"])
+            pt_BR: Lista de intervalos para recuperar (ex. ["Sheet1!A1:C3", "Sheet2!B2:D4"])
+            zh_Hans: 要检索的范围列表（例如 ["Sheet1!A1:C3", "Sheet2!B2:D4"]）
+          label:
+            en_US: Ranges
+            ja_JP: Ranges
+            pt_BR: Intervalos
+            zh_Hans: 范围列表
+          llm_description: An array of range strings to retrieve in A1 notation or
+            R1C1 notation (e.g. ["Sheet1!A1:C3", "Sheet2!B2:D4"])
+          max: null
+          min: null
+          name: ranges
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: SERIAL_NUMBER
+          form: form
+          human_description:
+            en_US: How dates, times, and durations should be represented in the output
+            ja_JP: How dates, times, and durations should be represented in the output
+            pt_BR: Como datas, horários e durações devem ser representados na saída
+            zh_Hans: 日期、时间和持续时间在输出中的表示方式
+          label:
+            en_US: Date Time Render Option
+            ja_JP: Date Time Render Option
+            pt_BR: Opção de Renderização de Data e Hora
+            zh_Hans: 日期时间渲染选项
+          llm_description: How dates, times, and durations should be represented in
+            the output
+          max: null
+          min: null
+          name: date_time_render_option
+          options:
+          - icon: ''
+            label:
+              en_US: SERIAL_NUMBER
+              ja_JP: SERIAL_NUMBER
+              pt_BR: NÚMERO DE SÉRIE
+              zh_Hans: 序列号
+            value: SERIAL_NUMBER
+          - icon: ''
+            label:
+              en_US: FORMATTED_STRING
+              ja_JP: FORMATTED_STRING
+              pt_BR: STRING FORMATADA
+              zh_Hans: 格式化字符串
+            value: FORMATTED_STRING
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: select
+        - auto_generate: null
+          default: null
+          form: form
+          human_description:
+            en_US: The major dimension that results should use
+            ja_JP: The major dimension that results should use
+            pt_BR: A dimensão principal que os resultados devem usar
+            zh_Hans: 结果应使用的主要维度
+          label:
+            en_US: Major Dimension
+            ja_JP: Major Dimension
+            pt_BR: Dimensão Principal
+            zh_Hans: 主要维度
+          llm_description: The major dimension that results should use (ROWS or COLUMNS)
+          max: null
+          min: null
+          name: major_dimension
+          options:
+          - icon: ''
+            label:
+              en_US: ROWS
+              ja_JP: ROWS
+              pt_BR: LINHAS
+              zh_Hans: 行
+            value: ROWS
+          - icon: ''
+            label:
+              en_US: COLUMNS
+              ja_JP: COLUMNS
+              pt_BR: COLUNAS
+              zh_Hans: 列
+            value: COLUMNS
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: select
+        - auto_generate: null
+          default: null
+          form: form
+          human_description:
+            en_US: How values should be represented in the output
+            ja_JP: How values should be represented in the output
+            pt_BR: Como os valores devem ser representados na saída
+            zh_Hans: 值在输出中的表示方式
+          label:
+            en_US: Value Render Option
+            ja_JP: Value Render Option
+            pt_BR: Opção de Renderização de Valor
+            zh_Hans: 值渲染选项
+          llm_description: How values should be represented in the output
+          max: null
+          min: null
+          name: value_render_option
+          options:
+          - icon: ''
+            label:
+              en_US: FORMATTED_VALUE
+              ja_JP: FORMATTED_VALUE
+              pt_BR: VALOR FORMATADO
+              zh_Hans: 格式化值
+            value: FORMATTED_VALUE
+          - icon: ''
+            label:
+              en_US: FORMULA
+              ja_JP: FORMULA
+              pt_BR: FÓRMULA
+              zh_Hans: 公式
+            value: FORMULA
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: select
+        params:
+          date_time_render_option: ''
+          major_dimension: ''
+          ranges: ''
+          spreadsheet_id: ''
+          value_render_option: ''
+        plugin_id: omluc/google_sheets
+        plugin_unique_identifier: omluc/google_sheets:0.0.2@17f06eaa1d905595e1a76460e7249707a722142353d551cf14aed3d8517c134f
+        provider_icon: https://cloud.dify.ai/console/api/workspaces/current/plugin/icon?tenant_id=9f95ad54-9d18-4ecd-9a05-5659679afe15&filename=34925a568cd7d4ffd9fd783616ac381ad6abf61462e263bf46fbdf7c254ecaf1.svg
+        provider_id: omluc/google_sheets/google_sheets
+        provider_name: omluc/google_sheets/google_sheets
+        provider_type: builtin
+        selected: false
+        title: Batch Get
+        tool_configurations:
+          date_time_render_option:
+            type: constant
+            value: FORMATTED_STRING
+          major_dimension:
+            type: constant
+            value: ROWS
+          value_render_option:
+            type: constant
+            value: FORMATTED_VALUE
+        tool_description: Retrieve data from multiple ranges in a Google Sheet
+        tool_label: Batch Get
+        tool_name: batch_get
+        tool_node_version: '2'
+        tool_parameters:
+          ranges:
+            type: mixed
+            value: '["{{#1774704916992.target_month#}}!A:Z"]'
+          spreadsheet_id:
+            type: mixed
+            value: 1arK7MJ4NyqafhajR8-j1TKzTXlbsh86gyrSMJbgm0S8
+        type: tool
+      height: 141
+      id: '1774761545765'
+      position:
+        x: 642
+        y: 0
+      positionAbsolute:
+        x: 642
+        y: 0
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: -386.8291119325555
+      y: 465.8350714093814
+      zoom: 1.073033756407853
+  rag_pipeline_variables: []

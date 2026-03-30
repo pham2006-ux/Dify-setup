@@ -59,7 +59,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     const { companyName, source = "email", medium = "direct_sales" } = request.params.arguments;
     
     // サイトのベースURL
-    const BASE_URL = 'https://portfolio-site-4559.vercel.app/';
+    const BASE_URL = 'https://my-portfolio-site-kappa-sooty.vercel.app/';
     const url = new URL(BASE_URL);
     url.searchParams.set('utm_source', source);
     url.searchParams.set('utm_medium', medium);

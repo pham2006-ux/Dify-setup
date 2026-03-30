@@ -20,7 +20,7 @@ import { z } from 'zod';
 // --- 設定 ---
 const SUPABASE_URL = 'https://muipdtgspcnonsysdefj.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_-68W9V_oUnBz9ejUpKsCaw_cGl1Wnsy';
-const BASE_URL = 'https://portfolio-site-copy.vercel.app/';
+const BASE_URL = 'https://my-portfolio-site-kappa-sooty.vercel.app/';
 const UTM_SOURCE = 'email';
 const UTM_MEDIUM = 'outreach';
 

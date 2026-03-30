@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google口コミAI分析レポート | ファム ミンフィー</title>
+  <meta name="description" content="Googleの口コミを月別に自動収集・分析し、改善点と強みを即座にレポート。飲食店の口コミ対策をAIで効率化。">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" type="image/png" href="../../images/logo-h.png">
+  <link rel="apple-touch-icon" href="../../images/logo-h.png">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap');
+    :root {
+      --bg-primary:#0a0a0f; --bg-secondary:#12121a; --bg-card:#1a1a2e; --bg-card-hover:#1f1f35;
+      --bg-glass:rgba(26,26,46,0.7); --bg-glass-light:rgba(255,255,255,0.03);
+      --text-primary:#f0f0f5; --text-secondary:#a0a0b8; --text-muted:#6b6b80;
+      --accent-primary:#6c63ff; --accent-secondary:#00d4aa;
+      --accent-gradient:linear-gradient(135deg,#6c63ff 0%,#00d4aa 100%);
+      --accent-gradient-hover:linear-gradient(135deg,#7d75ff 0%,#00e6b8 100%);
+      --border-color:rgba(255,255,255,0.06); --border-hover:rgba(108,99,255,0.3);
+      --shadow-glow:0 0 40px rgba(108,99,255,0.15);
+      --font-main:'Inter','Noto Sans JP',-apple-system,sans-serif;
+      --section-padding:100px 0; --container-width:1140px; --card-radius:16px; --btn-radius:12px;
+      --transition-fast:0.2s cubic-bezier(0.4,0,0.2,1); --transition-smooth:0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;font-size:16px;}
+    body{font-family:var(--font-main);background:var(--bg-primary);color:var(--text-primary);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+    a{color:var(--accent-primary);text-decoration:none;transition:color var(--transition-fast);}
+    a:hover{color:var(--accent-secondary);}
+    img{max-width:100%;height:auto;}
+    .container{max-width:var(--container-width);margin:0 auto;padding:0 24px;}
+    .section{padding:var(--section-padding);position:relative;}
+    .section-title{font-size:2rem;font-weight:700;margin-bottom:16px;background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    /* Navbar */
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 0;transition:all var(--transition-smooth);background:transparent;}
+    .navbar.scrolled{background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border-color);padding:10px 0;}
+    .navbar .container{display:flex;justify-content:space-between;align-items:center;}
+    .nav-logo{font-size:1.25rem;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:8px;}
+    .nav-logo img{height:28px;width:28px;object-fit:contain;}
+    .nav-logo span{background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .nav-links{display:flex;list-style:none;gap:32px;align-items:center;}
+    .nav-links a{color:var(--text-secondary);font-size:0.9rem;font-weight:500;transition:color var(--transition-fast);position:relative;}
+    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--accent-gradient);transition:width var(--transition-smooth);}
+    .nav-links a:hover{color:var(--text-primary);}
+    .nav-links a:hover::after{width:100%;}
+    .nav-toggle{display:none;cursor:pointer;background:none;border:none;padding:8px;}
+    .nav-toggle span{display:block;width:24px;height:2px;background:var(--text-primary);margin:5px 0;transition:all var(--transition-fast);}
+    /* Buttons */
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:var(--btn-radius);font-size:0.95rem;font-weight:600;cursor:pointer;border:none;transition:all var(--transition-smooth);text-decoration:none;}
+    .btn-primary{background:var(--accent-gradient);color:#fff;box-shadow:0 4px 20px rgba(108,99,255,0.3);}
+    .btn-primary:hover{background:var(--accent-gradient-hover);color:#fff;box-shadow:0 6px 30px rgba(108,99,255,0.5);transform:translateY(-2px);}
+    .btn-secondary{background:transparent;color:var(--text-primary);border:1px solid var(--border-color);backdrop-filter:blur(10px);}
+    .btn-secondary:hover{border-color:var(--accent-primary);background:rgba(108,99,255,0.08);color:var(--text-primary);transform:translateY(-2px);}
+    /* Hero */
+    .detail-hero{padding:140px 0 60px;position:relative;overflow:hidden;text-align:center;background:radial-gradient(circle at center,rgba(108,99,255,0.15),transparent 60%);}
+    .detail-hero::before{content:'';position:absolute;top:-30%;left:-10%;width:500px;height:500px;background:radial-gradient(circle,rgba(108,99,255,0.08) 0%,transparent 70%);}
+    .breadcrumb{font-size:0.85rem;color:var(--text-muted);margin-bottom:16px;}
+    .breadcrumb a{color:var(--text-secondary);}
+    .detail-hero h1{font-size:2.8rem;font-weight:800;margin-bottom:16px;letter-spacing:-0.02em;}
+    .detail-hero .description{font-size:1.1rem;color:var(--text-secondary);max-width:640px;margin:0 auto;}
+    /* Feature List */
+    .feature-list{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
+    .feature-list li{background:var(--bg-glass);border:1px solid rgba(255,255,255,0.05);padding:20px;border-radius:12px;display:flex;align-items:flex-start;gap:16px;transition:transform 0.3s ease;}
+    .feature-list li:hover{transform:translateY(-5px);background:rgba(255,255,255,0.03);}
+    .feature-list .icon{font-size:1.5rem;background:rgba(108,99,255,0.15);border-radius:8px;padding:10px;display:inline-flex;flex-shrink:0;}
+    /* Table */
+    .comparison-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.3);margin-top:24px;}
+    .comparison-table th,.comparison-table td{padding:20px;text-align:left;}
+    .comparison-table thead{background:rgba(255,255,255,0.05);}
+    .comparison-table th{font-weight:600;color:var(--text-primary);border-bottom:2px solid var(--border-color);}
+    .comparison-table td{border-bottom:1px solid var(--border-color);background:var(--bg-secondary);font-size:0.95rem;}
+    .comparison-table .before{color:var(--text-muted);background:rgba(255,255,255,0.02);}
+    .comparison-table .after{color:var(--accent-primary);background:rgba(108,99,255,0.05);font-weight:600;}
+    /* Target List */
+    .target-list{list-style:none;}
+    .target-list li{padding:12px 0;border-bottom:1px solid var(--border-color);color:var(--text-secondary);font-size:0.95rem;display:flex;gap:10px;align-items:center;}
+    .target-list li::before{content:'✓';color:var(--accent-secondary);font-weight:700;}
+    /* Service Info */
+    .service-info{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin:32px 0;}
+    .service-info-item{text-align:center;padding:28px 20px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--card-radius);}
+    .service-info-item .label{font-size:0.85rem;color:var(--text-muted);margin-bottom:8px;}
+    .service-info-item .value{font-size:1.5rem;font-weight:700;background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    /* Demo Section */
+    .demo-section-inner{background:var(--bg-card);border:1px solid var(--border-color);border-radius:20px;padding:40px;position:relative;overflow:hidden;}
+    .demo-section-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent-gradient);}
+    .demo-title{font-size:1.3rem;font-weight:700;margin-bottom:24px;background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .demo-btn-group{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;}
+    .demo-video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;border:1px solid var(--border-color);margin-bottom:24px;}
+    .demo-video-wrap video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;}
+    .demo-embed-wrap{width:100%;height:420px;border-radius:12px;border:1px solid var(--border-color);overflow:hidden;margin-bottom:24px;}
+    .demo-embed-wrap iframe{width:100%;height:100%;border:0;}
+    .demo-link-card{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--bg-glass);border:1px solid var(--border-color);border-radius:12px;transition:all var(--transition-fast);text-decoration:none;color:var(--text-primary);}
+    .demo-link-card:hover{border-color:var(--border-hover);background:rgba(108,99,255,0.06);transform:translateY(-2px);color:var(--text-primary);}
+    .demo-link-card .dlc-icon{font-size:1.6rem;flex-shrink:0;color:initial;font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji","EmojiOne Color","Twemoji Mozilla",system-ui,sans-serif;}
+    .demo-link-card .dlc-label{font-size:0.8rem;color:var(--text-muted);margin-bottom:2px;}
+    .demo-link-card .dlc-title{font-size:0.95rem;font-weight:600;}
+    .demo-link-card .dlc-arrow{margin-left:auto;color:var(--accent-primary);font-size:1.1rem;}
+    .demo-links-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:8px;}
+    /* FAQ */
+    .faq-list{max-width:800px;margin:24px auto 0;}
+    .faq-item{background:var(--bg-glass);border:1px solid var(--border-color);padding:20px;border-radius:12px;margin-bottom:16px;transition:border-color var(--transition-fast);}
+    .faq-item:hover{border-color:var(--border-hover);}
+    .faq-item h4{font-size:1.1rem;color:var(--accent-primary);margin-bottom:8px;}
+    .faq-item p{color:var(--text-secondary);line-height:1.6;margin:0;}
+    /* CTA */
+    .cta-section{text-align:center;padding:80px 0;position:relative;}
+    .cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(108,99,255,0.08) 0%,transparent 60%);}
+    .cta-box{background:var(--bg-card);border:1px solid var(--border-color);border-radius:24px;padding:56px 40px;position:relative;overflow:hidden;}
+    .cta-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent-gradient);}
+    .cta-box h2{font-size:2rem;font-weight:700;margin-bottom:16px;}
+    .cta-box p{color:var(--text-secondary);margin-bottom:32px;max-width:540px;margin-left:auto;margin-right:auto;}
+    /* Footer */
+    .footer{padding:40px 0;border-top:1px solid var(--border-color);text-align:center;}
+    .footer p{color:var(--text-muted);font-size:0.85rem;}
+    /* Animation */
+    .animate-on-scroll{opacity:0;transform:translateY(30px);transition:all 0.8s cubic-bezier(0.4,0,0.2,1);}
+    .animate-on-scroll.visible{opacity:1;transform:translateY(0);}
+    /* Flow Steps */
+    .flow-steps{display:flex;flex-direction:column;gap:0;margin:32px 0;position:relative;}
+    .flow-step{display:flex;align-items:flex-start;gap:24px;padding:28px;background:var(--bg-glass);border:1px solid rgba(255,255,255,0.05);border-radius:16px;position:relative;transition:transform 0.3s ease,border-color 0.3s ease;}
+    .flow-step:hover{transform:translateX(8px);border-color:var(--border-hover);}
+    .flow-step-num{font-size:2rem;font-weight:800;background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;flex-shrink:0;width:48px;text-align:center;line-height:1;}
+    .flow-step-content h4{font-size:1.1rem;font-weight:600;margin-bottom:6px;}
+    .flow-step-content p{color:var(--text-secondary);font-size:0.95rem;margin:0;}
+    .flow-arrow{text-align:center;font-size:1.5rem;color:var(--accent-primary);padding:8px 0;opacity:0.6;}
+    /* Sample Report */
+    .sample-report{background:var(--bg-card);border:1px solid var(--border-color);border-radius:16px;padding:32px;margin-top:24px;}
+    .sample-report h4{font-size:1rem;font-weight:600;margin-bottom:16px;color:var(--accent-secondary);}
+    .report-category{margin-bottom:24px;}
+    .report-category h5{font-size:0.95rem;font-weight:600;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border-color);}
+    .report-category h5.improve{color:#f59e0b;}
+    .report-category h5.strength{color:#10b981;}
+    .report-category h5.action{color:#6c63ff;}
+    .report-item{display:flex;gap:12px;padding:10px 0;color:var(--text-secondary);font-size:0.9rem;line-height:1.6;}
+    .report-item::before{content:'';flex-shrink:0;width:6px;height:6px;border-radius:50%;margin-top:8px;}
+    .report-category .improve .report-item::before,.report-category:nth-child(1) .report-item::before{background:#f59e0b;}
+    .report-category .strength .report-item::before,.report-category:nth-child(2) .report-item::before{background:#10b981;}
+    .report-category .action .report-item::before,.report-category:nth-child(3) .report-item::before{background:#6c63ff;}
+    /* Video placeholder */
+    .video-placeholder{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;border:2px dashed var(--border-color);margin-bottom:24px;background:var(--bg-secondary);}
+    .video-placeholder-inner{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-muted);gap:12px;}
+    .video-placeholder-inner span{font-size:3rem;}
+    .video-placeholder-inner p{font-size:0.9rem;}
+    /* Responsive */
+    @media(max-width:768px){
+      .detail-hero h1{font-size:1.8rem;}
+      .nav-links{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,15,0.98);flex-direction:column;justify-content:center;align-items:center;gap:24px;z-index:999;}
+      .nav-links.active{display:flex;}
+      .nav-links a{font-size:1.2rem;}
+      .nav-toggle{display:block;z-index:1001;}
+      .service-info{grid-template-columns:1fr;}
+      .section{padding:60px 0;}
+      .cta-box{padding:36px 20px;}
+      .feature-list{grid-template-columns:1fr;}
+      .demo-links-grid{grid-template-columns:1fr;}
+      .flow-step{flex-direction:column;gap:12px;}
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="../../index.html" class="nav-logo"><img src="../../images/logo-h.png" alt="Icon"> <span>Pham Portfolio</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../../index.html#projects">作品・実績</a></li>
+        <li><a href="../../index.html#services">対応業務・料金</a></li>
+        <li><a href="../../index.html#contact" class="btn btn-primary" style="padding:10px 20px;font-size:0.85rem;">お問い合わせ</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="メニュー">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="detail-hero" style="border-bottom:1px solid rgba(255,255,255,0.05);">
+    <div class="container">
+      <p class="breadcrumb"><a href="../../index.html">ホーム</a> / 作品実績</p>
+      <h1>Google口コミ AI分析レポート</h1>
+      <p class="description">過去6ヶ月分のGoogle口コミをスプレッドシートに蓄積。分析したい月を入力するだけで、AIが改善点・強み・次のアクションを即座にレポートします。</p>
+    </div>
+  </section>
+
+  <!-- 利用シーン -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">■ こんなお悩みありませんか？</h2>
+      <ul class="feature-list animate-on-scroll" style="margin-top:24px;">
+        <li><span class="icon">😩</span><div><strong>口コミが増えてきたけど、全部読む時間がない</strong><br>毎月何十件もの口コミを一つひとつ確認するのは大変。見落としが起きがちです。</div></li>
+        <li><span class="icon">🤔</span><div><strong>「何を改善すべきか」が曖昧なまま</strong><br>ネガティブな口コミがあっても、感覚的な対応になりがち。データに基づく判断ができていない。</div></li>
+        <li><span class="icon">📉</span><div><strong>良い口コミも活かしきれていない</strong><br>お客様が褒めてくれているポイントを把握し切れず、強みを伸ばすチャンスを逃している。</div></li>
+        <li><span class="icon">⏰</span><div><strong>月次の振り返りに手間がかかる</strong><br>スタッフミーティングの前に口コミを整理してまとめる作業が毎月負担になっている。</div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 使い方の流れ -->
+  <section class="section" style="background:var(--bg-secondary);">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">■ 使い方はたった3ステップ</h2>
+      <div class="flow-steps animate-on-scroll">
+        <div class="flow-step">
+          <div class="flow-step-num">1</div>
+          <div class="flow-step-content">
+            <h4>分析したい月を入力</h4>
+            <p>チャット画面で「2025年3月」のように分析したい月を入力するだけ。難しい操作は一切不要です。</p>
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">
+          <div class="flow-step-num">2</div>
+          <div class="flow-step-content">
+            <h4>AIが口コミデータを自動取得・分析</h4>
+            <p>Googleスプレッドシートに蓄積された口コミデータから、指定月のデータをHTTPで取得。AIが内容を読み解き、傾向を分析します。</p>
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-step">
+          <div class="flow-step-num">3</div>
+          <div class="flow-step-content">
+            <h4>改善点・強み・Next Actionをレポート</h4>
+            <p>すぐに改善すべき点、維持・伸ばすべき良い点、そして具体的な次のアクションを整理して出力。そのまま店舗ミーティングの資料として使えます。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- デモ・動画 -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">■ デモ・関連リソース</h2>
+      <div class="demo-section-inner animate-on-scroll">
+        <p class="demo-title">操作デモ動画</p>
+        <!-- TODO: 動画ファイルを追加したら src を差し替えてください -->
+        <div class="video-placeholder">
+          <div class="video-placeholder-inner">
+            <span>🎬</span>
+            <p>デモ動画（後日追加予定）</p>
+          </div>
+        </div>
+        <!--
+        <div class="demo-video-wrap">
+          <video controls preload="metadata" poster="">
+            <source src="../../movies/review-analysis-demo.mp4" type="video/mp4">
+          </video>
+        </div>
+        -->
+
+        <p class="demo-title" style="margin-top:32px;">口コミデータ（Googleスプレッドシート）</p>
+        <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:16px;">架空の飲食店「旬菜ダイニング さくら」の過去6ヶ月分の口コミデータです。このデータをAIが自動取得して分析します。</p>
+        <!-- TODO: 下のURLをあなたの口コミデータ用スプレッドシートのURLに差し替えてください -->
+        <!-- 形式: https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit?usp=sharing を
+             https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/pubhtml?widget=true&headers=false に変更して埋め込み -->
+        <div class="demo-embed-wrap" style="height:360px;">
+          <iframe src="https://docs.google.com/spreadsheets/d/SPREADSHEET_ID/pubhtml?widget=true&headers=false" loading="lazy"></iframe>
+        </div>
+
+        <p class="demo-title" style="margin-top:32px;">実際に試す</p>
+        <div class="demo-links-grid">
+          <a href="https://udify.app/workflow/4bRM1DLvU6Lu98Nj" target="_blank" class="demo-link-card">
+            <span class="dlc-icon">🤖</span>
+            <div><div class="dlc-label">ワークフロー</div><div class="dlc-title">Dify デモを試す</div></div>
+            <span class="dlc-arrow">→</span>
+          </a>
+        </div>
+
+        <div class="demo-embed-wrap" style="margin-top:24px;">
+          <iframe src="https://udify.app/workflow/4bRM1DLvU6Lu98Nj" loading="lazy" allow="microphone"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AIの出力イメージ -->
+  <section class="section" style="background:var(--bg-secondary);">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">■ AIの出力イメージ</h2>
+      <p class="animate-on-scroll" style="color:var(--text-secondary);margin-bottom:8px;">例：架空の飲食店「旬菜ダイニング さくら」の2025年3月分レポート</p>
+      <div class="sample-report animate-on-scroll">
+        <h4>口コミ分析レポート - 2025年3月</h4>
+
+        <div class="report-category">
+          <h5 class="improve">すぐに改善すべき点</h5>
+          <div class="report-item">ランチタイム（11:30〜13:00）の待ち時間に関する不満が6件。「15分以上待った」「混雑時の案内が不十分」との声。整理券やモバイルオーダーの導入を検討。</div>
+          <div class="report-item">「スタッフの説明が足りない」が3件。特に季節限定メニューの食材やアレルギー情報について。メニュー表への詳細記載またはスタッフへの声かけ研修を推奨。</div>
+        </div>
+
+        <div class="report-category">
+          <h5 class="strength">維持・伸ばすべき良い点</h5>
+          <div class="report-item">「新鮮な食材」「季節感がある」との好評が12件と最多。旬の食材へのこだわりが高く評価されている。SNSでの発信にも活用可能。</div>
+          <div class="report-item">「スタッフが親切」「子連れでも安心」が8件。ファミリー層からの支持が厚い。この強みを公式サイトやGoogleビジネスプロフィールでもアピールを。</div>
+        </div>
+
+        <div class="report-category">
+          <h5 class="action">具体的なNext Action</h5>
+          <div class="report-item">来週中にランチタイムの混雑対策（番号札 or LINE順番待ちシステム）をテスト導入し、4月の口コミで効果を検証する。</div>
+          <div class="report-item">季節限定メニューの説明カードを各テーブルに設置。スタッフ向けに週1回の食材勉強会を実施。</div>
+          <div class="report-item">「旬の食材」をテーマにしたInstagram投稿を週2回実施。口コミの好評コメントを引用して信頼感を強化。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- できること -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">■ できること</h2>
+      <ul class="feature-list animate-on-scroll" style="margin-top:24px;">
+        <li><span class="icon">📊</span><div><strong>月別の口コミ傾向分析</strong><br>指定した月の口コミを自動取得し、ポジティブ・ネガティブの傾向を分析します。</div></li>
+        <li><span class="icon">🔍</span><div><strong>改善点の自動抽出</strong><br>ネガティブな口コミから、すぐに対処すべき課題を優先度付きで抽出します。</div></li>
+        <li><span class="icon">💎</span><div><strong>強みの可視化</strong><br>お客様から評価されているポイントを明確にし、さらに伸ばすべき方向性を提示します。</div></li>
+        <li><span class="icon">📋</span><div><strong>具体的なNext Actionの提案</strong><br>分析結果をもとに、来月までに実行すべき具体的なアクションプランを自動生成します。</div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 導入効果 -->
+  <section class="section" style="background:var(--bg-secondary);">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">■ 導入効果（ビフォーアフター）</h2>
+      <div style="overflow-x:auto;">
+        <table class="comparison-table animate-on-scroll">
+          <thead><tr><th>項目</th><th class="before">導入前</th><th class="after">導入後</th></tr></thead>
+          <tbody>
+            <tr><td>口コミの確認</td><td class="before">毎月1〜2時間かけて手動で確認</td><td class="after">月を入力するだけで30秒で完了</td></tr>
+            <tr><td>改善点の把握</td><td class="before">感覚的・属人的な判断</td><td class="after">データに基づく客観的な分析</td></tr>
+            <tr><td>ミーティング資料</td><td class="before">口コミを読み直してまとめる手間</td><td class="after">AIレポートをそのまま資料に活用</td></tr>
+            <tr><td>アクション立案</td><td class="before">何をすべきか曖昧なまま議論</td><td class="after">具体的なNext Actionがすぐ出る</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- おすすめ対象 -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">■ こんな方におすすめ</h2>
+      <ul class="target-list animate-on-scroll" style="max-width:700px;">
+        <li>Google口コミが月10件以上あるが、分析に手が回っていない</li>
+        <li>スタッフミーティングで口コミを活用したいが、まとめる時間がない</li>
+        <li>口コミの評価を上げるための具体的なアクションが欲しい</li>
+        <li>複数店舗の口コミを一元管理・比較したい</li>
+        <li>データに基づいた店舗改善を進めたい</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" style="background:var(--bg-secondary);">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">■ よくある質問</h2>
+      <div class="faq-list animate-on-scroll">
+        <div class="faq-item">
+          <h4>Q. 口コミデータはどうやって収集するのですか？</h4>
+          <p>A. Google口コミのデータをGoogleスプレッドシートに蓄積する仕組みをご用意します。定期的に自動収集するため、手動作業は不要です。</p>
+        </div>
+        <div class="faq-item">
+          <h4>Q. 飲食店以外でも使えますか？</h4>
+          <p>A. はい。美容室、クリニック、ホテル、小売店など、Google口コミがある業種であればどこでも対応可能です。</p>
+        </div>
+        <div class="faq-item">
+          <h4>Q. 分析の精度はどの程度ですか？</h4>
+          <p>A. 最新のAIモデルを使用しており、口コミの文脈やニュアンスを正確に理解します。ただし最終判断は人間が行うことを推奨しています。</p>
+        </div>
+        <div class="faq-item">
+          <h4>Q. 導入にどれくらいの費用がかかりますか？</h4>
+          <p>A. 店舗の規模や口コミ数によりますが、まずは無料相談にてお見積りいたします。お気軽にお問い合わせください。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-box animate-on-scroll">
+        <h2>このソリューションに興味がありますか？</h2>
+        <p>貴社の課題に合わせたカスタマイズも可能です。<br>まずはお気軽にご相談ください。</p>
+        <a href="../../index.html#contact" class="btn btn-primary">お問い合わせ ↲</a>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 ファム ミンフィー All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script src="../../js/analytics.js"></script>
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 50); });
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => { navLinks.classList.toggle('active'); navToggle.classList.toggle('active'); });
+    navLinks.querySelectorAll('a').forEach(a => { a.addEventListener('click', () => { navLinks.classList.remove('active'); navToggle.classList.remove('active'); }); });
+    const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } }); }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => { anchor.addEventListener('click', e => { const target = document.querySelector(anchor.getAttribute('href')); if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); } }); });
+  </script>
+</body>
+</html>

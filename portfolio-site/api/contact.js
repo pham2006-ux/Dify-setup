@@ -60,7 +60,7 @@ module.exports = async function handler(req, res) {
   try {
     const data = await resend.emails.send({
       from: 'Portfolio <onboarding@resend.dev>',
-      to: 'phamminhhuy2006@icloud.com',
+      to: 'minhhuypham2006@gmail.com',
       subject: `【ポートフォリオ】${company || '個人'} ${name}様からのお問い合わせ`,
       html: `
         <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -101,7 +101,14 @@ module.exports = async function handler(req, res) {
       replyTo: email,
     });
     
-    console.log('Resend Response:', data);
+    console.log('Resend Response:', JSON.stringify(data));
+    if (data.error) {
+      console.error('Resend error:', JSON.stringify(data.error));
+      return res.status(500).json({
+        error: 'メール送信に失敗しました',
+        details: data.error.message || String(data.error),
+      });
+    }
     return res.status(200).json({ success: true, data });
   } catch (error) {
     console.error('Email send error:', error);

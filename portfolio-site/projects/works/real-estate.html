@@ -92,6 +92,25 @@
     .demo-btn-group{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;}
     .demo-video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;border:1px solid var(--border-color);margin-bottom:24px;}
     .demo-video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
+    .usage-guide{margin-bottom:32px;}
+    .usage-guide-title{font-size:1.3rem;font-weight:700;margin-bottom:20px;background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    /* Tabs */
+    .tab-nav{display:flex;gap:0;margin-bottom:0;border-bottom:2px solid var(--border-color);overflow-x:auto;}
+    .tab-btn{padding:14px 24px;border:none;background:transparent;color:var(--text-muted);font-size:0.95rem;font-weight:600;cursor:pointer;position:relative;white-space:nowrap;transition:color 0.25s ease;}
+    .tab-btn:hover{color:var(--text-primary);}
+    .tab-btn.active{color:var(--accent-primary);}
+    .tab-btn.active::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--accent-gradient);}
+    .tab-btn .tab-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--bg-glass);border:1px solid var(--border-color);font-size:0.8rem;margin-right:8px;transition:all 0.25s ease;}
+    .tab-btn.active .tab-num{background:var(--accent-gradient);border-color:transparent;color:#fff;}
+    .tab-panel{display:none;padding:28px 0 0;}
+    .tab-panel.active{display:block;}
+    .tab-step{display:flex;align-items:flex-start;gap:16px;padding:20px;background:var(--bg-glass);border:1px solid var(--border-color);border-radius:12px;margin-bottom:12px;transition:border-color var(--transition-fast);}
+    .tab-step:hover{border-color:var(--border-hover);}
+    .tab-step-num{width:28px;height:28px;border-radius:50%;background:var(--accent-gradient);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;flex-shrink:0;margin-top:2px;}
+    .tab-step-body{flex:1;}
+    .tab-step-body strong{display:block;font-size:0.95rem;margin-bottom:4px;color:var(--text-primary);}
+    .tab-step-body p{color:var(--text-secondary);line-height:1.7;margin:0;font-size:0.9rem;}
+    @media(max-width:600px){.tab-btn{padding:12px 16px;font-size:0.85rem;}}
     .demo-embed-wrap{width:100%;height:420px;border-radius:12px;border:1px solid var(--border-color);overflow:hidden;margin-bottom:24px;}
     .demo-embed-wrap iframe{width:100%;height:100%;border:0;}
     .demo-link-card{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--bg-glass);border:1px solid var(--border-color);border-radius:12px;transition:all var(--transition-fast);text-decoration:none;color:var(--text-primary);}
@@ -164,13 +183,113 @@
     </div>
   </section>
 
+  <!-- こんなお悩みありませんか？ -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">■ こんなお悩みありませんか？</h2>
+      <ul class="feature-list animate-on-scroll" style="margin-top:24px;">
+        <li><span class="icon">😩</span><div><strong>営業時間外の問い合わせに対応できない</strong><br>深夜や休日にもお客様は物件を探しています。対応が遅れると、他社に流れてしまうことも。</div></li>
+        <li><span class="icon">📞</span><div><strong>電話・メール対応に追われ、本来の業務が進まない</strong><br>「この条件の物件ありますか？」という定型的な質問に、スタッフが毎回手作業で対応している。</div></li>
+        <li><span class="icon">📅</span><div><strong>内見予約の調整に手間がかかる</strong><br>電話やメールでの日程調整、予約変更・キャンセル対応に時間を取られている。</div></li>
+        <li><span class="icon">🤔</span><div><strong>物件データはあるのに、活用しきれていない</strong><br>スプレッドシートや社内システムに物件情報はあるのに、お客様への提案が属人的になっている。</div></li>
+      </ul>
+    </div>
+  </section>
+
   <!-- デモ -->
   <section class="section" style="background:var(--bg-secondary);">
     <div class="container">
       <h2 class="section-title animate-on-scroll">■ デモ・関連リソース</h2>
       <div class="demo-section-inner animate-on-scroll">
-        <p class="demo-title">🎬 デモ動画</p>
-        <div class="demo-video-wrap">
+        <p class="usage-guide-title">📖 使い方ガイド</p>
+        <div class="usage-guide">
+          <div class="tab-nav">
+            <button class="tab-btn active" data-tab="tab1"><span class="tab-num">1</span>物件の絞り込み</button>
+            <button class="tab-btn" data-tab="tab2"><span class="tab-num">2</span>内見の予約</button>
+            <button class="tab-btn" data-tab="tab3"><span class="tab-num">3</span>予約の変更・キャンセル</button>
+          </div>
+
+          <!-- Tab 1: 物件の絞り込み -->
+          <div class="tab-panel active" id="tab1">
+            <div class="tab-step">
+              <span class="tab-step-num">1</span>
+              <div class="tab-step-body">
+                <strong>チャットボットに希望条件を伝える</strong>
+                <p>エリア・家賃・間取り・駅徒歩分数など、希望する条件をチャットボットに入力します。例：「渋谷区で家賃10万円以下の1LDK」</p>
+              </div>
+            </div>
+            <div class="tab-step">
+              <span class="tab-step-num">2</span>
+              <div class="tab-step-body">
+                <strong>AIが物件データを検索・絞り込み</strong>
+                <p>Google スプレッドシートに登録された物件データの中から、条件に合う物件をAIが自動で絞り込みます。下の「Googleスプレッドシートを見る」からデータを確認しながらお試しください。</p>
+              </div>
+            </div>
+            <div class="tab-step">
+              <span class="tab-step-num">3</span>
+              <div class="tab-step-body">
+                <strong>条件に合った物件が一覧で表示される</strong>
+                <p>家賃・間取り・最寄り駅などの情報と一緒に、マッチした物件をチャット上で一覧表示してくれます。条件を変えて再検索することもできます。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 2: 内見の予約 -->
+          <div class="tab-panel" id="tab2">
+            <div class="tab-step">
+              <span class="tab-step-num">1</span>
+              <div class="tab-step-body">
+                <strong>「内見の予約をしたい」と伝える</strong>
+                <p>チャットボットに「内見の予約をしたい」と入力すると、予約フローが開始されます。</p>
+              </div>
+            </div>
+            <div class="tab-step">
+              <span class="tab-step-num">2</span>
+              <div class="tab-step-body">
+                <strong>必要な情報をヒアリングされる</strong>
+                <p>お名前・電話番号・希望日時・希望物件名など、予約に必要な情報をチャットボットが順番に聞いてくれます。</p>
+              </div>
+            </div>
+            <div class="tab-step">
+              <span class="tab-step-num">3</span>
+              <div class="tab-step-body">
+                <strong>入力内容の確認</strong>
+                <p>すべての情報を入力すると、チャットボットが入力内容を一覧で表示し「予約を確定しますか？」と確認してくれます。</p>
+              </div>
+            </div>
+            <div class="tab-step">
+              <span class="tab-step-num">4</span>
+              <div class="tab-step-body">
+                <strong>「予約を確定」で予約完了</strong>
+                <p>「予約を確定」と入力すると、予約が完了し受付番号が発行されます。同時に、予約変更・キャンセル用のサイトURLも表示されます。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 3: 予約の変更・キャンセル -->
+          <div class="tab-panel" id="tab3">
+            <div class="tab-step">
+              <span class="tab-step-num">1</span>
+              <div class="tab-step-body">
+                <strong>チャットボットにキャンセル・変更したいと伝える</strong>
+                <p>「予約を変更したい」や「予約をキャンセルしたい」とチャットボットに入力します。</p>
+              </div>
+            </div>
+            <div class="tab-step">
+              <span class="tab-step-num">2</span>
+              <div class="tab-step-body">
+                <strong>予約管理サイトのURLが案内される</strong>
+                <p>チャットボットが予約変更・キャンセル用のサイトURLを表示してくれます。下の「予約変更・キャンセルサイト」からも直接アクセスできます。</p>
+              </div>
+            </div>
+            <div class="tab-step">
+              <span class="tab-step-num">3</span>
+              <div class="tab-step-body">
+                <strong>受付番号と電話番号でログイン</strong>
+                <p>予約時に発行された受付番号と、登録した電話番号を入力してログインすると、予約内容の変更やキャンセルができます。</p>
+              </div>
+            </div>
+          </div>
         </div>
         <p class="demo-title">🔗 関連リンク</p>
         <div class="demo-links-grid">
@@ -276,6 +395,16 @@
     const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } }); }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
     document.querySelectorAll('a[href^="#"]').forEach(anchor => { anchor.addEventListener('click', e => { const target = document.querySelector(anchor.getAttribute('href')); if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); } }); });
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.getAttribute('data-tab');
+        btn.closest('.usage-guide').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.closest('.usage-guide').querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
   </script>
 </body>
 </html>

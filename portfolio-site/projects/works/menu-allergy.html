@@ -92,6 +92,14 @@
     .demo-btn-group{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;}
     .demo-video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;border:1px solid var(--border-color);margin-bottom:24px;}
     .demo-video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
+    .usage-guide{margin-bottom:32px;}
+    .usage-guide-title{font-size:1.3rem;font-weight:700;margin-bottom:20px;background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .usage-step{background:var(--bg-glass);border:1px solid var(--border-color);border-radius:12px;padding:24px;margin-bottom:16px;transition:border-color var(--transition-fast);}
+    .usage-step:hover{border-color:var(--border-hover);}
+    .usage-step-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+    .usage-step-number{width:32px;height:32px;border-radius:50%;background:var(--accent-gradient);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;}
+    .usage-step-name{font-size:1.05rem;font-weight:700;color:var(--text-primary);}
+    .usage-step p{color:var(--text-secondary);line-height:1.8;margin:0;font-size:0.95rem;}
     .demo-embed-wrap{width:100%;height:420px;border-radius:12px;border:1px solid var(--border-color);overflow:hidden;margin-bottom:24px;}
     .demo-embed-wrap iframe{width:100%;height:100%;border:0;}
     .demo-link-card{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--bg-glass);border:1px solid var(--border-color);border-radius:12px;transition:all var(--transition-fast);text-decoration:none;color:var(--text-primary);}
@@ -161,11 +169,34 @@
     </div>
   </section>
 
+  <!-- こんなお悩みありませんか？ -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">■ こんなお悩みありませんか？</h2>
+      <ul class="feature-list animate-on-scroll" style="margin-top:24px;">
+        <li><span class="icon">⚠️</span><div><strong>アレルギー対応の確認に時間がかかる</strong><br>お客様から「この料理に卵は入っていますか？」と聞かれるたびに、厨房に確認しに行く必要がある。</div></li>
+        <li><span class="icon">🌍</span><div><strong>外国人のお客様への対応が難しい</strong><br>食事制限やアレルギーに関する質問を、言語の壁で正確に答えられないことがある。</div></li>
+        <li><span class="icon">😰</span><div><strong>アレルギー事故が怖い</strong><br>スタッフの知識不足や伝達ミスで、アレルギー食材を含む料理を提供してしまうリスクがある。</div></li>
+        <li><span class="icon">📋</span><div><strong>メニュー変更のたびにアレルギー表の更新が大変</strong><br>季節メニューや日替わりメニューの変更のたびに、アレルギー情報の一覧を手作業で更新している。</div></li>
+      </ul>
+    </div>
+  </section>
+
   <!-- デモ -->
   <section class="section" style="background:var(--bg-secondary);">
     <div class="container">
       <h2 class="section-title animate-on-scroll">■ デモ・関連リソース</h2>
       <div class="demo-section-inner animate-on-scroll">
+        <p class="usage-guide-title">📖 使い方ガイド</p>
+        <div class="usage-guide">
+          <div class="usage-step">
+            <div class="usage-step-header">
+              <span class="usage-step-number">1</span>
+              <span class="usage-step-name">メニュー・アレルギー情報を質問する</span>
+            </div>
+            <p>チャットボットにアレルギーや食事制限に関する質問を入力すると、Google スプレッドシートのメニューナレッジを参照してAIが回答してくれます。例えば「卵アレルギーがあるのですが、食べられるメニューはありますか？」のように質問してみてください。下の「Googleスプレッドシートを見る」からナレッジの内容を確認できます。</p>
+          </div>
+        </div>
         <p class="demo-title">🔗 関連リンク</p>
         <div class="demo-links-grid">
           <a href="https://udify.app/chat/YOKLGSwKd1gzZr0S" target="_blank" class="demo-link-card">

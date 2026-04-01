@@ -90,6 +90,14 @@
     .demo-btn-group{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;}
     .demo-video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;border:1px solid var(--border-color);margin-bottom:24px;}
     .demo-video-wrap video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;}
+    .usage-guide{margin-bottom:32px;}
+    .usage-guide-title{font-size:1.3rem;font-weight:700;margin-bottom:20px;background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .usage-step{background:var(--bg-glass);border:1px solid var(--border-color);border-radius:12px;padding:24px;margin-bottom:16px;transition:border-color var(--transition-fast);}
+    .usage-step:hover{border-color:var(--border-hover);}
+    .usage-step-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+    .usage-step-number{width:32px;height:32px;border-radius:50%;background:var(--accent-gradient);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;}
+    .usage-step-name{font-size:1.05rem;font-weight:700;color:var(--text-primary);}
+    .usage-step p{color:var(--text-secondary);line-height:1.8;margin:0;font-size:0.95rem;}
     .demo-embed-wrap{width:100%;height:420px;border-radius:12px;border:1px solid var(--border-color);overflow:hidden;margin-bottom:24px;}
     .demo-embed-wrap iframe{width:100%;height:100%;border:0;}
     .demo-link-card{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--bg-glass);border:1px solid var(--border-color);border-radius:12px;transition:all var(--transition-fast);text-decoration:none;color:var(--text-primary);}
@@ -233,21 +241,26 @@
     <div class="container">
       <h2 class="section-title animate-on-scroll">■ デモ・関連リソース</h2>
       <div class="demo-section-inner animate-on-scroll">
-        <p class="demo-title">操作デモ動画</p>
-        <!-- TODO: 動画ファイルを追加したら src を差し替えてください -->
-        <div class="video-placeholder">
-          <div class="video-placeholder-inner">
-            <span>🎬</span>
-            <p>デモ動画（後日追加予定）</p>
+        <p class="usage-guide-title">📖 使い方ガイド</p>
+        <div class="usage-guide">
+          <div class="usage-step">
+            <div class="usage-step-header">
+              <span class="usage-step-number">1</span>
+              <span class="usage-step-name">分析したい月を入力する</span>
+            </div>
+            <p>チャットボットに分析したいデータの月（例：「3月」「2024年12月」など）を入力するだけでOKです。AIがその月の口コミデータをGoogleスプレッドシートから自動的に収集します。</p>
+          </div>
+          <div class="usage-step">
+            <div class="usage-step-header">
+              <span class="usage-step-number">2</span>
+              <span class="usage-step-name">AIが分析レポートを生成</span>
+            </div>
+            <p>AIが口コミデータを分析し、以下の3つの観点でレポートを自動生成します。<br>
+            ・改善すべき点：お客様の不満やクレームから抽出<br>
+            ・維持・伸ばすべき点：高評価の要因を分析<br>
+            ・具体的なNext Action：すぐに実行できる改善アクションを提案</p>
           </div>
         </div>
-        <!--
-        <div class="demo-video-wrap">
-          <video controls preload="metadata" poster="">
-            <source src="../../movies/review-analysis-demo.mp4" type="video/mp4">
-          </video>
-        </div>
-        -->
 
         <p class="demo-title" style="margin-top:32px;">口コミデータ（Googleスプレッドシート）</p>
         <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:16px;">架空の飲食店「旬菜ダイニング 」の過去6ヶ月分の口コミデータです。このデータをAIが自動取得して分析します。</p>

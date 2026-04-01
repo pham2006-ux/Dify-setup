@@ -92,6 +92,14 @@
     .demo-btn-group{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;}
     .demo-video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;border:1px solid var(--border-color);margin-bottom:24px;}
     .demo-video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
+    .usage-guide{margin-bottom:32px;}
+    .usage-guide-title{font-size:1.3rem;font-weight:700;margin-bottom:20px;background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .usage-step{background:var(--bg-glass);border:1px solid var(--border-color);border-radius:12px;padding:24px;margin-bottom:16px;transition:border-color var(--transition-fast);}
+    .usage-step:hover{border-color:var(--border-hover);}
+    .usage-step-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+    .usage-step-number{width:32px;height:32px;border-radius:50%;background:var(--accent-gradient);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;}
+    .usage-step-name{font-size:1.05rem;font-weight:700;color:var(--text-primary);}
+    .usage-step p{color:var(--text-secondary);line-height:1.8;margin:0;font-size:0.95rem;}
     .demo-embed-wrap{width:100%;height:420px;border-radius:12px;border:1px solid var(--border-color);overflow:hidden;margin-bottom:24px;}
     .demo-embed-wrap iframe{width:100%;height:100%;border:0;}
     .demo-link-card{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--bg-glass);border:1px solid var(--border-color);border-radius:12px;transition:all var(--transition-fast);text-decoration:none;color:var(--text-primary);}
@@ -161,17 +169,40 @@
     </div>
   </section>
 
+  <!-- こんなお悩みありませんか？ -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">■ こんなお悩みありませんか？</h2>
+      <ul class="feature-list animate-on-scroll" style="margin-top:24px;">
+        <li><span class="icon">😩</span><div><strong>入居者からの同じ質問に何度も対応している</strong><br>「ゴミの日はいつ？」「駐輪場の使い方は？」など、毎回同じ質問に電話やメールで対応するのが負担になっている。</div></li>
+        <li><span class="icon">⏰</span><div><strong>夜間・休日の問い合わせに対応できない</strong><br>トラブルや質問は営業時間外にも発生。対応が遅れると入居者の不満につながりやすい。</div></li>
+        <li><span class="icon">📄</span><div><strong>マニュアルはあるのに、誰も見てくれない</strong><br>入居者向けの案内資料を配布しても読まれず、結局スタッフが口頭で説明している。</div></li>
+        <li><span class="icon">🏢</span><div><strong>物件ごとにルールが違い、対応が属人化している</strong><br>物件ごとの細かいルールをベテランスタッフしか把握しておらず、対応品質にばらつきが出ている。</div></li>
+      </ul>
+    </div>
+  </section>
+
   <!-- デモ -->
   <section class="section" style="background:var(--bg-secondary);">
     <div class="container">
       <h2 class="section-title animate-on-scroll">■ デモ・関連リソース</h2>
       <div class="demo-section-inner animate-on-scroll">
-        <p class="demo-title">🎬 デモ動画</p>
-        <div class="demo-video-wrap">
-          <video controls autoplay muted loop style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
-            <source src="../../movies/入居者サポートボット.mp4" type="video/mp4">
-            お使いのブラウザは動画タグをサポートしていません。
-          </video>
+        <p class="usage-guide-title">📖 使い方ガイド</p>
+        <div class="usage-guide">
+          <div class="usage-step">
+            <div class="usage-step-header">
+              <span class="usage-step-number">1</span>
+              <span class="usage-step-name">ナレッジベースを確認する</span>
+            </div>
+            <p>下の「Googleスプレッドシートを見る」から、入居者向けFAQのナレッジベースを確認できます。AIはこのデータをもとに回答を生成します。</p>
+          </div>
+          <div class="usage-step">
+            <div class="usage-step-header">
+              <span class="usage-step-number">2</span>
+              <span class="usage-step-name">チャットボットに質問する</span>
+            </div>
+            <p>入居者として困っていること（設備トラブル・契約関連・ゴミ出しルールなど）をチャットボットに質問すると、Google スプレッドシートのナレッジベースに沿ってAIが回答してくれます。</p>
+          </div>
         </div>
         <p class="demo-title">🔗 関連リンク</p>
         <div class="demo-links-grid">

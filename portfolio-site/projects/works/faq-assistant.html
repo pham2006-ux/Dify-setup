@@ -92,6 +92,14 @@
     .demo-btn-group{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;}
     .demo-video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;border:1px solid var(--border-color);margin-bottom:24px;}
     .demo-video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
+    .usage-guide{margin-bottom:32px;}
+    .usage-guide-title{font-size:1.3rem;font-weight:700;margin-bottom:20px;background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .usage-step{background:var(--bg-glass);border:1px solid var(--border-color);border-radius:12px;padding:24px;margin-bottom:16px;transition:border-color var(--transition-fast);}
+    .usage-step:hover{border-color:var(--border-hover);}
+    .usage-step-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+    .usage-step-number{width:32px;height:32px;border-radius:50%;background:var(--accent-gradient);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;}
+    .usage-step-name{font-size:1.05rem;font-weight:700;color:var(--text-primary);}
+    .usage-step p{color:var(--text-secondary);line-height:1.8;margin:0;font-size:0.95rem;}
     .demo-embed-wrap{width:100%;height:420px;border-radius:12px;border:1px solid var(--border-color);overflow:hidden;margin-bottom:24px;}
     .demo-embed-wrap iframe{width:100%;height:100%;border:0;}
     .demo-link-card{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--bg-glass);border:1px solid var(--border-color);border-radius:12px;transition:all var(--transition-fast);text-decoration:none;color:var(--text-primary);}
@@ -161,11 +169,41 @@
     </div>
   </section>
 
+  <!-- こんなお悩みありませんか？ -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title animate-on-scroll">■ こんなお悩みありませんか？</h2>
+      <ul class="feature-list animate-on-scroll" style="margin-top:24px;">
+        <li><span class="icon">😩</span><div><strong>同じ質問がSlackや社内チャットで何度も繰り返される</strong><br>「経費精算のやり方は？」「有給の申請方法は？」など、毎回誰かが回答している状態。</div></li>
+        <li><span class="icon">📚</span><div><strong>社内マニュアルはあるのに、探すのが面倒</strong><br>ドキュメントが複数のフォルダに分散していて、知りたい情報にたどり着くまでに時間がかかる。</div></li>
+        <li><span class="icon">🆕</span><div><strong>新入社員の質問対応に先輩社員の時間が取られる</strong><br>基本的なルールや手続きの説明に毎回時間を使い、本来の業務が後回しになっている。</div></li>
+        <li><span class="icon">🤷</span><div><strong>ナレッジにない質問の対処がわからない</strong><br>マニュアルに載っていない質問が来たとき、誰に聞けばいいかわからず放置されがち。</div></li>
+      </ul>
+    </div>
+  </section>
+
   <!-- デモ -->
   <section class="section" style="background:var(--bg-secondary);">
     <div class="container">
       <h2 class="section-title animate-on-scroll">■ デモ・関連リソース</h2>
       <div class="demo-section-inner animate-on-scroll">
+        <p class="usage-guide-title">📖 使い方ガイド</p>
+        <div class="usage-guide">
+          <div class="usage-step">
+            <div class="usage-step-header">
+              <span class="usage-step-number">1</span>
+              <span class="usage-step-name">社内ドキュメントに基づくFAQ回答</span>
+            </div>
+            <p>チャットボットに社内の質問（勤怠・経費精算・福利厚生など）を入力すると、Googleドキュメントの社内マニュアルを参照してAIが回答してくれます。下の「Googleドキュメントを見る」からナレッジの内容を確認できます。</p>
+          </div>
+          <div class="usage-step">
+            <div class="usage-step-header">
+              <span class="usage-step-number">2</span>
+              <span class="usage-step-name">ナレッジにない質問はSlackへ転送</span>
+            </div>
+            <p>ナレッジベースに該当するFAQがない場合、チャットボットが「担当チャンネルに質問を送信しますか？」と提案してくれます。希望すれば、社内の各Slackチャンネルに質問を自動送信できます。下の「デモチャンネルを見る」から送信先のSlackチャンネルを確認できます。</p>
+          </div>
+        </div>
         <p class="demo-title">🔗 関連リンク</p>
         <div class="demo-links-grid">
           <a href="https://udify.app/chat/FBFqiShfQ4gDeKT1" target="_blank" class="demo-link-card">

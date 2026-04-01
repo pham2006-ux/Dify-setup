@@ -4,14 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ファム ミンフィー | Dify専門のAIチャットボット構築</title>
+  <title>ファム ミンフィー | Dify専門のAI業務自動化ツール構築</title>
   <meta name="description" content="Dify専門のAI開発者。RAG・外部連携を活用したAIチャットボット・ワークフローを構築し、不動産・飲食・社内業務の効率化を実現します。">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" type="image/png" href="images/logo-h.png">
   <link rel="apple-touch-icon" href="images/logo-h.png">
-  <!-- OGP Settings -->
-  <meta property="og:title" content="ファム ミンフィー | Dify専門のAIチャットボット構築">
+  <meta property="og:title" content="ファム ミンフィー | Dify専門のAI業務自動化ツール構築">
   <meta property="og:description" content="Dify専門のAI開発者。RAG・外部連携を活用したAIチャットボット・ワークフローを構築し、不動産・飲食・社内業務の効率化を実現します。">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://my-portfolio-site-kappa-sooty.vercel.app/">
@@ -26,10 +25,11 @@
     <div class="container">
       <a href="index.html" class="nav-logo"><img src="images/logo-h.png" alt="Icon"> <span>Pham Portfolio</span></a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="#about">自己紹介</a></li>
-        <li><a href="#services">提供サービス</a></li>
-        <li><a href="#projects">実績</a></li>
-        <li><a href="#contact" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.85rem;">お問い合わせ</a></li>
+        <li><a href="#services">サービス</a></li>
+        <li><a href="#works">実績</a></li>
+        <li><a href="#about">プロフィール</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact" class="nav-cta">お問い合わせ</a></li>
       </ul>
       <button class="nav-toggle" id="navToggle" aria-label="メニュー">
         <span></span><span></span><span></span>
@@ -37,336 +37,456 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- Hero -->
   <section class="hero" id="hero">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-text">
-          <div class="hero-badge">
-            <span class="dot"></span>
-            DifyによるAIチャットフロー・ワークフロー構築
-          </div>
-          <h1>
-            あなたの業務を<br><span class="gradient-text">AIで24時間・365日</span><br>自動化・効率化します
-          </h1>
-          <p class="hero-description">
-            AI開発ツール「Dify」を専門に、RAG（独自データ学習）や
-            外部システム連携を活用したAIチャットボット・ワークフローを構築。
-            不動産、飲食、社内業務の生産性を最大化します。
-          </p>
-          <div class="btn-group">
-            <a href="#projects" class="btn btn-primary">実績を見る →</a>
-            <a href="#contact" class="btn btn-secondary">無料で相談する</a>
-          </div>
-        </div>
-      </div>
+    <div class="hero-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
     </div>
-  </section>
-
-  <!-- ====================================== -->
-  <!-- 自己紹介セクション（リニューアル）        -->
-  <!-- ====================================== -->
-  <section class="section" id="about">
-    <div class="container">
-
-      <!-- プロフィールヘッダー -->
-      <div class="about-hero animate-on-scroll">
-        <div class="about-hero-image">
-          <img src="images/profile.png" alt="ファム ミーティー">
-        </div>
-        <div class="about-hero-info">
-          <p class="about-label">About Me</p>
-          <h2 class="about-name">ファム ミーティー</h2>
-          <p class="about-tagline">群馬出身・19歳の大学生。<br>AIで、時代の分岐点を駆け抜ける。</p>
-          <div class="about-tags">
-            <span class="about-tag">📍 群馬出身</span>
-            <span class="about-tag">🎓 情報系大学生</span>
-            <span class="about-tag">🤖 Dify・AIエージェント専門</span>
-          </div>
-        </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Dify専門のAIソリューション構築
       </div>
-
-      <!-- ストーリーライン -->
-      <div class="story-section">
-        <h3 class="story-heading">My Story</h3>
-        <div class="story-line">
-
-          <div class="story-chapter animate-on-scroll">
-            <div class="chapter-num">01</div>
-            <div class="chapter-body">
-              <h4>翻訳家の夢と、PCとの出会い</h4>
-              <p>群馬で育った。英語が得意で、翻訳家になろうと思っていた。でも高校2年の後半、授業でプログラミングに触れた瞬間、「こっちだ」と確信した。</p>
-            </div>
-          </div>
-
-          <div class="story-chapter animate-on-scroll">
-            <div class="chapter-num">02</div>
-            <div class="chapter-body">
-              <h4>遅すぎた方向転換と、受験の挫折</h4>
-              <p>受験まで時間がない中で、IT系の大学を目指した。必死に勉強したが、第一志望には届かなかった。滑り止めの私立大学へ——それでも、諦めなかった。</p>
-            </div>
-          </div>
-
-          <div class="story-chapter animate-on-scroll">
-            <div class="chapter-num">03</div>
-            <div class="chapter-body">
-              <h4>AIエージェントとの衝撃的な出会い</h4>
-              <p>ある日、AIエージェントを知った。自分のタスクを代わりにこなしてくれる。しかも、指示の仕方次第で質を落とさずに業務を遂行してくれる。「自分は今、時代の分岐点にいる」——そう確信した瞬間だった。</p>
-            </div>
-          </div>
-
-          <div class="story-chapter animate-on-scroll">
-            <div class="chapter-num">04</div>
-            <div class="chapter-body">
-              <h4>「知識の差」が人を傷つけると気づいた日</h4>
-              <p>自分自身、賃貸契約で痛い目に遭った。強制でない消毒代3万円を「当然」のように請求され、説明もなかった。不動産だけじゃない——飲食、社内業務、あらゆる現場に「知らないから損をする」構造がある。そのギャップを、AIで埋めていきたいと思った。</p>
-            </div>
-          </div>
-
-          <div class="story-chapter animate-on-scroll">
-            <div class="chapter-num">05</div>
-            <div class="chapter-body">
-              <h4>今、ここにいる理由</h4>
-              <p>19歳。大学生。まだ何者でもない。でも、後悔しない人生を生きたいと思っている。将来ストレスなく生きるために、今この瞬間に全力を注ぐ。それが、僕がAIと向き合い続ける理由です。</p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- 強み -->
-      <div class="strengths-block animate-on-scroll">
-        <h4 class="strengths-title">得意分野・強み</h4>
-        <div class="strengths-grid">
-          <div class="strength-item">DifyによるAIチャットフロー・ワークフロー構築</div>
-          <div class="strength-item">RAG（独自データ活用）の実装</div>
-          <div class="strength-item">外部システムとのAPI連携</div>
-          <div class="strength-item">Pythonを用いた開発</div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ====================================== -->
-  <!-- 提供サービス・料金セクション             -->
-  <!-- ====================================== -->
-  <section class="section" id="services" style="background: var(--bg-secondary);">
-    <div class="container">
-      <h2 class="section-title animate-on-scroll"><span class="title-emoji">💼</span> 提供サービス</h2>
-      <p class="section-subtitle animate-on-scroll">Difyを活用したAIチャットフロー・ワークフロー構築をワンストップで提供します。</p>
-
-      <div class="service-card animate-on-scroll">
-        <div class="service-image">
-          <img src="images/workflow-bot.png" alt="AIチャットフロー・ワークフロー構築">
-        </div>
-        <div class="service-content">
-          <h3>AIチャットフロー・ワークフロー構築</h3>
-          <p class="price"><span>¥</span>50,000<span>〜</span> <span class="price-desc">（税別）</span></p>
-          <p>お客様のビジネス課題に合わせて、最適なAIチャットボット・業務自動化フローを構築します。小規模なものから、複雑なシステム連携を伴う大規模なものまで対応可能です。</p>
-          <ul class="feature-list">
-            <li><span class="icon">✅</span> <strong>基本料金に含まれる内容</strong>
-              <ul>
-                <li>AIチャットフロー設計・構築</li>
-                <li>RAG（独自データ参照）構築</li>
-                <li>システム連携構築（API連携など）</li>
-              </ul>
-            </li>
-            <li><span class="icon">💡</span> <strong>対応可能な業種・用途</strong>
-              <ul>
-                <li>不動産業界（物件紹介、内見予約など）</li>
-                <li>飲食業界（メニュー案内、アレルギー対応など）</li>
-                <li>社内業務（FAQ対応、申請フロー自動化など）</li>
-              </ul>
-            </li>
-          </ul>
-          <p class="pricing-note">
-            ※上記はあくまで目安です。構築するAIの規模や複雑さによって料金は変動します。<br>
-            ※お見積り・ご相談は無料です。まずはお気軽にお問い合わせください。
-          </p>
-          <div class="btn-group" style="margin-top: 24px;">
-            <a href="#contact" class="btn btn-primary">無料で相談・見積もりを依頼する</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ====================================== -->
-  <!-- 作品実績セクション                      -->
-  <!-- ====================================== -->
-  <section class="section" id="projects">
-    <div class="container">
-      <h2 class="section-title animate-on-scroll"><span class="title-emoji">🏆</span> 実績紹介</h2>
-      <p class="section-subtitle animate-on-scroll">実際に構築し、デモとして体験いただけるAIチャットボット・ワークフローの実績です。</p>
-
-      <div class="projects-grid">
-
-        <!-- 1. 不動産物件紹介・内見予約 -->
-        <div class="card animate-on-scroll">
-          <div class="card-img"><img src="images/real-estate-bot.png" alt="不動産物件紹介・内見予約チャットボT"></div>
-          <h3>不動産物件紹介チャットボット</h3>
-          <p class="card-desc">
-            <strong>課題：</strong>24時間対応で営業担当者の負担を軽減し、夜間や休日の機会損失を防止したい。<br><strong>解決策：</strong>希望条件のヒアリングから最適な物件提案、内見予約までをAIが自動化。営業効率と予約率を向上させます。
-          </p>
-          <ul class="feature-list-small">
-            <li><span class="icon">🔍</span> DB連携による物件紹介</li>
-            <li><span class="icon">📅</span> 内見予約・変更</li>
-            <li><span class="icon">🤖</span> RAGでのFAQ対応</li>
-            <li><span class="icon">📝</span> 予約情報をDBに記録</li>
-          </ul>
-          <a href="projects/works/real-estate.html" class="card-link">デモを試す →</a>
-        </div>
-
-        <!-- 2. 入居者サポートBot -->
-        <div class="card animate-on-scroll">
-          <div class="card-img"><img src="images/resident-support-bot.png" alt="入居者サポートBot"></div>
-          <h3>入居者サポートボット</h3>
-          <p class="card-desc">
-            <strong>課題：</strong>設備の不具合やゴミの日など、定型的な問い合わせ対応にリソースを割かれている。<br><strong>解決策：</strong>入居者からのよくある質問にAIが24時間自動回答。管理会社の対応業務を大幅に削減し、住民満足度を高めます。
-          </p>
-          <ul class="feature-list-small">
-            <li><span class="icon">🤖</span> RAGによる24時間FAQ対応</li>
-            <li><span class="icon">📋</span> 契約内容の確認</li>
-            <li><span class="icon">🗑️</span> ゴミ出しルールの案内</li>
-          </ul>
-          <a href="projects/works/resident-support.html" class="card-link">デモを試す →</a>
-        </div>
-
-        <!-- 3. 社内FAQアシスタント -->
-        <div class="card animate-on-scroll">
-          <div class="card-img"><img src="images/faq-assistant-bot.png" alt="社内FAQアシスタント"></div>
-          <h3>社内FAQアシスタント</h3>
-          <p class="card-desc">
-            <strong>課題：</strong>バックオフィス部門への定型的な質問が多く、担当者がコア業務に集中できない。<br><strong>解決策：</strong>社内規定やマニュアルを学習したAIが質問に即時回答。未解決の質問は適切な部署のSlackに通知し、対応漏れを防ぎます。
-          </p>
-          <ul class="feature-list-small">
-            <li><span class="icon">🤖</span> RAGによる社内情報への回答</li>
-            <li><span class="icon">💬</span> Slackへのエスカレーション</li>
-            <li><span class="icon">🔄</span> 申請フローの案内</li>
-          </ul>
-          <a href="projects/works/faq-assistant.html" class="card-link">デモを試す →</a>
-        </div>
-
-        <!-- 4. アレルギー・食事制限相談サポート -->
-        <div class="card animate-on-scroll">
-          <div class="card-img"><img src="images/menu-allergy-bot.png" alt="アレルギー・食事制限相談サポート"></div>
-          <h3>アレルギー相談サポート</h3>
-          <p class="card-desc">
-            <strong>課題：</strong>お客様のアレルギーに関する質問に対し、スタッフが即座に正確な情報を提供することが難しい。<br><strong>解決策：</strong>メニューの原材料データを学習したAIが、アレルギーに関する質問に即時回答。顧客の安全と満足度を両立します。
-          </p>
-          <ul class="feature-list-small">
-            <li><span class="icon">🤖</span> RAGによるメニュー情報の提供</li>
-            <li><span class="icon">🍳</span> 代替メニューの提案</li>
-            <li><span class="icon">📱</span> QRコードから簡単アクセス</li>
-          </ul>
-          <a href="projects/works/menu-allergy.html" class="card-link">デモを試す →</a>
-        </div>
-
-        <!-- 5. Google口コミAI分析レポート -->
-        <div class="card animate-on-scroll">
-          <div class="card-img" style="display:flex;align-items:center;justify-content:center;background:var(--bg-card);font-size:3rem;min-height:180px;">📊</div>
-          <h3>Google口コミ AI分析レポート</h3>
-          <p class="card-desc">
-            <strong>課題：</strong>Google口コミが増えても分析に手が回らず、改善アクションが曖昧なまま。<br><strong>解決策：</strong>分析したい月を入力するだけで、AIが口コミデータを自動取得・分析し、改善点・強み・具体的なNext Actionをレポートします。
-          </p>
-          <ul class="feature-list-small">
-            <li><span class="icon">🔍</span> 月別口コミの自動分析</li>
-            <li><span class="icon">📋</span> 改善点・強みの抽出</li>
-            <li><span class="icon">🎯</span> 具体的なNext Action提案</li>
-          </ul>
-          <a href="projects/works/review-analysis.html" class="card-link">デモを試す →</a>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ====================================== -->
-  <!-- お問い合わせフォームセクション            -->
-  <!-- ====================================== -->
-  <section class="section" id="contact" style="background: var(--bg-secondary);">
-    <div class="container">
-      <h2 class="section-title animate-on-scroll"><span class="title-emoji">📩</span> 無料相談・お問い合わせ</h2>
-      <p class="section-subtitle animate-on-scroll">
-        「自社で導入可能か」「具体的な費用感を知りたい」など、<br>
-        導入前の懸念点から丁寧にお答えします。ヒアリング・お見積りは無料です。
+      <h1>AIで、あなたの<br><span class="gradient-text">ビジネスを次のステージへ</span></h1>
+      <p class="hero-desc">
+        AI開発ツール「Dify」を専門に、チャットボット・業務ワークフローを構築。<br>
+        不動産、飲食、社内業務など、あらゆる現場の生産性を最大化します。
       </p>
+      <div class="hero-buttons">
+        <a href="#contact" class="btn btn-primary">無料で相談する →</a>
+        <a href="#services" class="btn btn-outline">サービスを見る ↓</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">↓</div>
+  </section>
 
-      <div class="contact-wrapper animate-on-scroll">
-        <form id="contactForm" class="contact-form" action="/api/contact" method="POST">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="company">会社名</label>
-              <input type="text" id="company" name="company" placeholder="例：株式会社山田商事">
-            </div>
-            <div class="form-group">
-              <label for="name">お名前 <span class="required">*</span></label>
-              <input type="text" id="name" name="name" placeholder="例：山田 太郎" required>
-            </div>
-          </div>
+  <!-- Services -->
+  <section class="section section-white" id="services">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-eyebrow">Services</span>
+        <h2>提供サービス</h2>
+        <p>Difyを活用したAIチャットボット・ワークフロー構築をワンストップで提供します。</p>
+      </div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label for="email">メールアドレス <span class="required">*</span></label>
-              <input type="email" id="email" name="email" placeholder="例：taro@example.com" required>
-            </div>
-            <div class="form-group">
-              <label for="phone">電話番号</label>
-              <input type="tel" id="phone" name="phone" placeholder="例：03-1234-5678">
-            </div>
-          </div>
+      <div class="services-grid">
+        <div class="service-card animate-on-scroll">
+          <div class="service-icon">🤖</div>
+          <h3>AIチャットボット構築</h3>
+          <p>お客様の質問に24時間自動で対応するAIチャットボットを構築します。問い合わせ対応の負担を減らし、顧客満足度を向上させます。</p>
+          <ul class="service-list">
+            <li><span class="check">✓</span> 物件紹介・予約受付の自動化</li>
+            <li><span class="check">✓</span> メニュー案内・アレルギー対応</li>
+            <li><span class="check">✓</span> 社内FAQ・ヘルプデスクの自動応答</li>
+          </ul>
+        </div>
 
-          <div class="form-group">
-            <label for="interest">ご興味のあるサービス</label>
-            <select id="interest" name="interest">
-              <option value="">選択してください</option>
-              <option value="chatbot">AIチャットボット構築（5万円〜）</option>
-              <option value="workflow">AIワークフロー構築（5万円〜）</option>
-              <option value="multiple">複数サービスに興味がある</option>
-              <option value="other">その他・相談したい</option>
-            </select>
-          </div>
+        <div class="service-card animate-on-scroll">
+          <div class="service-icon">⚡</div>
+          <h3>AIワークフロー構築</h3>
+          <p>定型的な業務フローをAIで自動化。手作業に費やしていた時間を、本来やるべき仕事に充てられるようにします。</p>
+          <ul class="service-list">
+            <li><span class="check">✓</span> データ集計・レポート自動生成</li>
+            <li><span class="check">✓</span> 口コミ分析・改善提案の自動化</li>
+            <li><span class="check">✓</span> 申請・承認フローの効率化</li>
+          </ul>
+        </div>
 
-          <div class="form-group">
-            <label for="message">お問い合わせ内容 <span class="required">*</span></label>
-            <textarea id="message" name="message" rows="5" placeholder="現在の課題や、導入したいチャットボットのイメージ等をご記入ください。"
-              required></textarea>
-          </div>
+        <div class="service-card animate-on-scroll">
+          <div class="service-icon">📚</div>
+          <h3>RAG（独自データ活用）</h3>
+          <p>自社のマニュアル・契約書・商品データをAIに学習させ、正確で実用的な回答を生成する仕組みを構築します。</p>
+          <ul class="service-list">
+            <li><span class="check">✓</span> 社内ドキュメントの即時検索・回答</li>
+            <li><span class="check">✓</span> 物件・商品データベースとの連携</li>
+            <li><span class="check">✓</span> 契約情報・規約への正確な参照</li>
+          </ul>
+        </div>
 
-          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 16px;">
-            送信する →
-          </button>
-
-          <p class="form-note">
-            ※ 通常1〜2営業日以内にご返信いたします。<br>
-            ※ ご入力いただいた情報は、お問い合わせ対応の目的のみに使用します。
-          </p>
-        </form>
-
-        <!-- 送信完了メッセージ（初期非表示） -->
-        <div id="formSuccess" class="form-success" style="display: none;">
-          <div class="success-icon">✅</div>
-          <h3>お問い合わせありがとうございます！</h3>
-          <p>内容を確認の上、1〜2営業日以内にご連絡いたします。</p>
+        <div class="service-card animate-on-scroll">
+          <div class="service-icon">🔗</div>
+          <h3>外部システム連携</h3>
+          <p>既存のツールやシステムとAIをつなぎ、業務全体をシームレスに自動化します。</p>
+          <ul class="service-list">
+            <li><span class="check">✓</span> Slack・LINE等へのエスカレーション</li>
+            <li><span class="check">✓</span> Google Sheets・カレンダー連携</li>
+            <li><span class="check">✓</span> 予約システム・CRMとのAPI接続</li>
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ====================================== -->
-  <!-- AI名言セクション                        -->
-  <!-- ====================================== -->
+  <!-- Works -->
+  <section class="section section-slate" id="works">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-eyebrow">Works</span>
+        <h2>制作実績</h2>
+        <p>実際に構築し、デモとして体験いただけるAIチャットボット・ワークフローです。</p>
+      </div>
+
+      <div class="works-grid">
+
+        <div class="work-card animate-on-scroll">
+          <div class="work-thumb">
+            <img src="images/real-estate-bot.png" alt="不動産物件紹介チャットボット">
+            <span class="work-badge">デモあり</span>
+          </div>
+          <div class="work-body">
+            <h3>不動産物件紹介チャットボット</h3>
+            <p>希望条件のヒアリングから物件提案、内見予約までをAIが自動化。</p>
+            <div class="work-tags">
+              <span>Dify</span><span>RAG</span><span>DB連携</span><span>予約管理</span>
+            </div>
+            <a href="projects/works/real-estate.html" class="work-link">デモを試す →</a>
+          </div>
+        </div>
+
+        <div class="work-card animate-on-scroll">
+          <div class="work-thumb">
+            <img src="images/resident-support-bot.png" alt="入居者サポートBot">
+            <span class="work-badge">デモあり</span>
+          </div>
+          <div class="work-body">
+            <h3>入居者サポートボット</h3>
+            <p>入居者からのよくある質問にAIが24時間自動回答。管理会社の対応を大幅削減。</p>
+            <div class="work-tags">
+              <span>Dify</span><span>RAG</span><span>FAQ対応</span>
+            </div>
+            <a href="projects/works/resident-support.html" class="work-link">デモを試す →</a>
+          </div>
+        </div>
+
+        <div class="work-card animate-on-scroll">
+          <div class="work-thumb">
+            <img src="images/faq-assistant-bot.png" alt="社内FAQアシスタント">
+            <span class="work-badge">デモあり</span>
+          </div>
+          <div class="work-body">
+            <h3>社内FAQアシスタント</h3>
+            <p>社内規定やマニュアルを学習したAIが即時回答。未解決はSlackへ自動通知。</p>
+            <div class="work-tags">
+              <span>Dify</span><span>RAG</span><span>Slack連携</span>
+            </div>
+            <a href="projects/works/faq-assistant.html" class="work-link">デモを試す →</a>
+          </div>
+        </div>
+
+        <div class="work-card animate-on-scroll">
+          <div class="work-thumb">
+            <img src="images/menu-allergy-bot.png" alt="アレルギー相談サポート">
+            <span class="work-badge">デモあり</span>
+          </div>
+          <div class="work-body">
+            <h3>アレルギー相談サポート</h3>
+            <p>メニューの原材料データを学習したAIが、アレルギーに関する質問に即時回答。</p>
+            <div class="work-tags">
+              <span>Dify</span><span>RAG</span><span>飲食業</span>
+            </div>
+            <a href="projects/works/menu-allergy.html" class="work-link">デモを試す →</a>
+          </div>
+        </div>
+
+        <div class="work-card animate-on-scroll">
+          <div class="work-thumb work-thumb-gradient">📊</div>
+          <div class="work-body">
+            <h3>Google口コミ AI分析レポート</h3>
+            <p>月を入力するだけで、AIが口コミデータを自動分析し改善レポートを生成。</p>
+            <div class="work-tags">
+              <span>Dify</span><span>ワークフロー</span><span>データ分析</span>
+            </div>
+            <a href="projects/works/review-analysis.html" class="work-link">デモを試す →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="cta-banner">
+    <div class="container">
+      <h2 class="animate-on-scroll">AIで業務を効率化しませんか？</h2>
+      <p class="animate-on-scroll">ヒアリングからお見積りまで無料。まずはお気軽にご相談ください。</p>
+      <a href="#contact" class="btn animate-on-scroll">無料で相談する →</a>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="section section-white" id="process">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-eyebrow">Process</span>
+        <h2>導入の流れ</h2>
+      </div>
+
+      <div class="process-grid">
+        <div class="process-line"></div>
+
+        <div class="process-step animate-on-scroll">
+          <div class="process-icon">💬</div>
+          <span class="step-badge">STEP 1</span>
+          <h4>ヒアリング</h4>
+          <p>現在の業務課題や、AIで解決したいことをお聞かせください。オンラインで対応可能です。</p>
+        </div>
+
+        <div class="process-step animate-on-scroll">
+          <div class="process-icon">🔍</div>
+          <span class="step-badge">STEP 2</span>
+          <h4>設計・ご提案</h4>
+          <p>お伺いした内容をもとに、最適なAIソリューションの設計とお見積りをご提示します。</p>
+        </div>
+
+        <div class="process-step animate-on-scroll">
+          <div class="process-icon">🚀</div>
+          <span class="step-badge">STEP 3</span>
+          <h4>構築・テスト</h4>
+          <p>Difyを用いてAIチャットボット・ワークフローを構築し、動作確認を行います。</p>
+        </div>
+
+        <div class="process-step animate-on-scroll">
+          <div class="process-icon">🛡️</div>
+          <span class="step-badge">STEP 4</span>
+          <h4>納品・運用サポート</h4>
+          <p>完成したAIツールを納品し、運用方法をご説明。導入後のサポートも行います。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About / Profile -->
+  <section class="section section-slate" id="about">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-eyebrow">About</span>
+        <h2>プロフィール</h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-avatar-wrapper animate-on-scroll">
+          <div class="about-avatar-ring">
+            <div class="about-avatar">
+              <img src="images/profile.png" alt="ファム ミンフィー">
+            </div>
+          </div>
+        </div>
+
+        <div class="about-info animate-on-scroll">
+          <h3 class="about-name">ファム ミンフィー</h3>
+          <p class="about-title">Dify専門 AI Solutions Builder</p>
+
+          <p>
+            ベトナム国籍ですが日本生まれ・日本育ちのため、日本語は一般の方と同じレベルで話せます。情報系の大学に在学しながら、AI開発ツール「Dify」を専門にAIチャットボット・ワークフローの構築を行っています。
+          </p>
+          <p>
+            高校時代にプログラミングと出会い、AIエージェントの可能性に衝撃を受けました。「指示の仕方次第で質を落とさずに業務を遂行してくれる」——その体験から、不動産・飲食・社内業務など、あらゆる現場の課題をAIで解決していくことを目指しています。
+          </p>
+
+          <div class="about-skills">
+            <p class="about-skills-label">スキル・技術</p>
+            <div class="skills-chips">
+              <span>Dify</span>
+              <span>RAG</span>
+              <span>Python</span>
+              <span>API連携</span>
+              <span>AIエージェント</span>
+              <span>ChatGPT / Claude</span>
+              <span>LINE連携</span>
+              <span>Slack連携</span>
+            </div>
+          </div>
+
+          <blockquote class="about-quote">
+            後悔しない人生を生きたい。将来ストレスなく生きるために、今この瞬間に全力を注ぐ。
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section-white" id="faq">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-eyebrow">FAQ</span>
+        <h2>よくある質問</h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item animate-on-scroll">
+          <button class="faq-question">
+            <span>AIの知識がなくても導入できますか？</span>
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              はい、もちろんです。AIの知識がなくても問題ありません。お客様の業務課題をヒアリングし、最適なAIツールの設計から構築・導入までを一貫してサポートいたします。
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item animate-on-scroll">
+          <button class="faq-question">
+            <span>費用はどのくらいかかりますか？</span>
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              基本料金は5万円〜です。構築するAIの規模や複雑さによって変動しますが、お見積りは無料ですので、まずはお気軽にご相談ください。
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item animate-on-scroll">
+          <button class="faq-question">
+            <span>どのくらいの期間で導入できますか？</span>
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              シンプルなチャットボットであれば1〜2週間、複雑なワークフローや外部連携を含む場合は2〜4週間が目安です。ヒアリング時に具体的なスケジュールをご提示します。
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item animate-on-scroll">
+          <button class="faq-question">
+            <span>導入後のサポートはありますか？</span>
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              はい、納品後も運用に関するご質問や調整に対応いたします。AIの回答精度の改善や、新しい機能の追加もご相談いただけます。
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item animate-on-scroll">
+          <button class="faq-question">
+            <span>どんな業界に対応していますか？</span>
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              不動産、飲食、社内業務を中心に、業界を問わず対応可能です。「こんな業務をAIで効率化できるかな？」というご相談だけでも大歓迎です。
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact-section" id="contact">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <span class="section-eyebrow">Contact</span>
+        <h2>無料相談・お問い合わせ</h2>
+        <p>「自社で導入可能か」「具体的な費用感を知りたい」など、導入前の懸念点から丁寧にお答えします。</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info animate-on-scroll">
+          <div class="contact-item">
+            <div class="contact-item-icon">✉️</div>
+            <div>
+              <p class="contact-item-label">メール</p>
+              <p class="contact-item-value">minhhuypham2006@gmail.com</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">⏰</div>
+            <div>
+              <p class="contact-item-label">対応時間</p>
+              <p class="contact-item-value">平日 10:00 - 18:00（オンライン対応）</p>
+            </div>
+          </div>
+
+          <div class="contact-box">
+            <div class="contact-box-header">
+              <div class="contact-box-icon">⚡</div>
+              <p class="contact-box-title">初回ヒアリング無料</p>
+            </div>
+            <p>お客様の業務課題を伺い、最適なAI活用方法をご提案します。お見積りも無料です。</p>
+            <ul class="benefit-list">
+              <li><span class="check">✓</span> 2営業日以内にご返信</li>
+              <li><span class="check">✓</span> オンラインミーティング対応</li>
+              <li><span class="check">✓</span> 些細なご相談でも歓迎</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="animate-on-scroll">
+          <form id="contactForm" class="contact-form" action="/api/contact" method="POST">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="company">会社名</label>
+                <input type="text" id="company" name="company" placeholder="例：株式会社山田商事">
+              </div>
+              <div class="form-group">
+                <label for="name">お名前 <span class="required">*</span></label>
+                <input type="text" id="name" name="name" placeholder="例：山田 太郎" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">メールアドレス <span class="required">*</span></label>
+                <input type="email" id="email" name="email" placeholder="例：taro@example.com" required>
+              </div>
+              <div class="form-group">
+                <label for="phone">電話番号</label>
+                <input type="tel" id="phone" name="phone" placeholder="例：03-1234-5678">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="interest">ご興味のあるサービス</label>
+              <select id="interest" name="interest">
+                <option value="">選択してください</option>
+                <option value="chatbot">AIチャットボット構築（5万円〜）</option>
+                <option value="workflow">AIワークフロー構築（5万円〜）</option>
+                <option value="multiple">複数サービスに興味がある</option>
+                <option value="other">その他・相談したい</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">お問い合わせ内容 <span class="required">*</span></label>
+              <textarea id="message" name="message" rows="5" placeholder="現在の課題や、導入したいAIツールのイメージをご記入ください。" required></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">送信する →</button>
+
+            <p style="color: var(--slate-500); font-size: 0.78rem; text-align: center; margin-top: 12px;">
+              ※ 通常1〜2営業日以内にご返信いたします。<br>
+              ※ ご入力いただいた情報は、お問い合わせ対応の目的のみに使用します。
+            </p>
+          </form>
+
+          <div id="formSuccess" class="form-success">
+            <div class="success-icon">✅</div>
+            <h3>お問い合わせありがとうございます！</h3>
+            <p>内容を確認の上、1〜2営業日以内にご連絡いたします。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quote -->
   <section class="quote-section">
     <div class="container">
       <div class="quote-block animate-on-scroll">
-        <div class="quote-icon">"</div>
+        <span class="quote-mark">"</span>
         <blockquote class="quote-text">
-          AIは優秀な人間のコピーだ。<br>
-          定型業務はAIに任せ、本当に大切なことに時間を使う。<br>
-          それだけです。
+          AIは優秀な人間のコピーです。<br>
+          定型業務はAIに任せ、本当に大切なことに時間を使うべきです。
         </blockquote>
+        <cite class="quote-author">— ファム ミンフィー</cite>
       </div>
     </div>
   </section>
@@ -374,9 +494,18 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <p>&copy; 2026 ファム ミンフィー All Rights Reserved.</p>
+      <p>&copy; 2025 ファム ミンフィー All rights reserved.</p>
+      <div class="footer-links">
+        <a href="#services">サービス</a>
+        <a href="#works">実績</a>
+        <a href="#about">プロフィール</a>
+        <a href="#contact">お問い合わせ</a>
+      </div>
     </div>
   </footer>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" aria-label="トップへ戻る">↑</button>
 
   <script src="js/analytics.js"></script>
   <script src="js/main.js"></script>

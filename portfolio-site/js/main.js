@@ -1,10 +1,9 @@
-/* Main JavaScript
-   ================ */
+/* Main JavaScript — Redesigned */
 
 document.addEventListener('DOMContentLoaded', function () {
 
   // ---- Navbar Scroll Effect ----
-  const navbar = document.querySelector('.navbar');
+  var navbar = document.querySelector('.navbar');
   if (navbar) {
     window.addEventListener('scroll', function () {
       if (window.scrollY > 50) {
@@ -16,8 +15,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ---- Mobile Menu Toggle ----
-  const navToggle = document.querySelector('.nav-toggle');
-  const navLinks = document.querySelector('.nav-links');
+  var navToggle = document.querySelector('.nav-toggle');
+  var navLinks = document.querySelector('.nav-links');
   if (navToggle && navLinks) {
     navToggle.addEventListener('click', function () {
       navLinks.classList.toggle('active');
@@ -32,9 +31,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ---- Scroll Animations (Intersection Observer) ----
-  const animateElements = document.querySelectorAll('.animate-on-scroll');
+  var animateElements = document.querySelectorAll('.animate-on-scroll');
   if (animateElements.length > 0) {
-    const observer = new IntersectionObserver(
+    var observer = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
@@ -45,24 +44,33 @@ document.addEventListener('DOMContentLoaded', function () {
       },
       { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
     );
-
     animateElements.forEach(function (el) {
       observer.observe(el);
     });
   }
 
   // ---- FAQ Accordion ----
-  const faqItems = document.querySelectorAll('.faq-item');
+  var faqItems = document.querySelectorAll('.faq-item');
   faqItems.forEach(function (item) {
-    const question = item.querySelector('.faq-question');
+    var question = item.querySelector('.faq-question');
     if (question) {
       question.addEventListener('click', function () {
-        const isActive = item.classList.contains('active');
+        var answer = item.querySelector('.faq-answer');
+        var isActive = item.classList.contains('active');
+
         // Close all
-        faqItems.forEach(function (i) { i.classList.remove('active'); });
+        faqItems.forEach(function (i) {
+          i.classList.remove('active');
+          var a = i.querySelector('.faq-answer');
+          if (a) a.style.maxHeight = null;
+        });
+
         // Open clicked if was closed
         if (!isActive) {
           item.classList.add('active');
+          if (answer) {
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+          }
         }
       });
     }
@@ -71,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // ---- Smooth Scroll for Anchor Links ----
   document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
     anchor.addEventListener('click', function (e) {
-      const target = document.querySelector(this.getAttribute('href'));
+      var target = document.querySelector(this.getAttribute('href'));
       if (target) {
         e.preventDefault();
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -79,29 +87,36 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // ---- Stagger animation delay for cards ----
-  const cards = document.querySelectorAll('.projects-grid .card');
-  cards.forEach(function (card, i) {
-    card.style.transitionDelay = (i * 0.1) + 's';
-  });
+  // ---- Back to Top Button ----
+  var backToTop = document.getElementById('backToTop');
+  if (backToTop) {
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 600) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+    backToTop.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 
   // ---- Contact Form Handler ----
-  const contactForm = document.getElementById('contactForm');
-  const formSuccess = document.getElementById('formSuccess');
+  var contactForm = document.getElementById('contactForm');
+  var formSuccess = document.getElementById('formSuccess');
   if (contactForm) {
     contactForm.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      const formData = new FormData(contactForm);
-      const submitBtn = contactForm.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
+      var formData = new FormData(contactForm);
+      var submitBtn = contactForm.querySelector('button[type="submit"]');
+      var originalText = submitBtn.textContent;
 
-      // ボタンをローディング状態に
       submitBtn.textContent = '送信中...';
       submitBtn.disabled = true;
       submitBtn.style.opacity = '0.7';
 
-      // Vercel Functionsへ送信
       fetch('/api/contact', {
         method: 'POST',
         body: JSON.stringify({
@@ -131,11 +146,9 @@ document.addEventListener('DOMContentLoaded', function () {
       })
       .then(function (data) {
         if (data.success) {
-          // 送信成功
           contactForm.style.display = 'none';
           if (formSuccess) formSuccess.style.display = 'block';
 
-          // PostHogイベント送信
           if (typeof posthog !== 'undefined') {
             var company = sessionStorage.getItem('portfolio_company') || 'direct';
             posthog.capture('contact_form_submitted', {

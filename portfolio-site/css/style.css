@@ -990,6 +990,28 @@ ul { list-style: none; }
   .hero h1 { font-size: 1.9rem; }
   .hero-buttons { flex-direction: column; }
   .hero-buttons .btn { width: 100%; justify-content: center; }
-  .process-grid { grid-template-columns: 1fr; }
-  .process-icon { width: 80px; height: 80px; font-size: 2rem; }
+  .process-grid { grid-template-columns: 1fr; gap: 16px; }
+  .process-step {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    grid-template-areas:
+      "icon badge"
+      "icon title"
+      "icon desc";
+    gap: 4px 16px;
+    align-items: start;
+    text-align: left;
+    background: var(--slate-50);
+    border: 1px solid var(--slate-100);
+    padding: 20px;
+    border-radius: 16px;
+  }
+  .process-icon {
+    grid-area: icon;
+    width: 64px; height: 64px; font-size: 1.6rem;
+    margin: 0;
+  }
+  .step-badge { grid-area: badge; justify-self: start; margin-bottom: 2px; }
+  .process-step h4 { grid-area: title; margin-bottom: 4px; font-size: 0.95rem; }
+  .process-step p { grid-area: desc; font-size: 0.85rem; margin-bottom: 0; }
 }

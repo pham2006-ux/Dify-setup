@@ -46,7 +46,11 @@
       "Bash(curl -s https://sample-site-flame.vercel.app/)",
       "Bash(npx vercel:*)",
       "Bash(grep -n \"video\\\\|iframe\\\\|embed\\\\|デモ\\\\|demo\" /c/Users/phamm/Desktop/Dify-setup-new/portfolio-site/projects/works/*.html)",
-      "Bash(grep -n \"<video\\\\|<iframe\\\\|src=\"\"\" /c/Users/phamm/Desktop/Dify-setup-new/portfolio-site/projects/works/*.html)"
+      "Bash(grep -n \"<video\\\\|<iframe\\\\|src=\"\"\" /c/Users/phamm/Desktop/Dify-setup-new/portfolio-site/projects/works/*.html)",
+      "WebFetch(domain:www.asterecs-e.jp)",
+      "WebFetch(domain:www.viewhouse.co.jp)",
+      "WebFetch(domain:www.san-kou.net)",
+      "Bash(curl -s -X POST \"https://muipdtgspcnonsysdefj.supabase.co/rest/v1/url_history\" -H \"apikey: sb_publishable_-68W9V_oUnBz9ejUpKsCaw_cGl1Wnsy\" -H \"Authorization: Bearer sb_publishable_-68W9V_oUnBz9ejUpKsCaw_cGl1Wnsy\" -H \"Content-Type: application/json\" -H \"Prefer: return=representation\" -d '[:*)"
     ]
   }
 }
